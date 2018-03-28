@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Assets.Scripts
 {
     /// <summary>
-    /// Sensible wrapper for MonoBehaviour
+    /// Wrapper for MonoBehaviour
     /// </summary>
     public abstract class Script : MonoBehaviour, IDisposable
     {
