@@ -3,6 +3,7 @@
 namespace Assets.Scripts
 {
     [RequireComponent(typeof(Collider2D))]
+    [RequireComponent(typeof(AudioSource))]
     public class Entity : Script
     {
         /// <summary>
@@ -14,6 +15,11 @@ namespace Assets.Scripts
         /// Speed to scale movement
         /// </summary>
         public float MoveSpeed = 1.0f;
+
+        /// <summary>
+        /// Death sound clip
+        /// </summary>
+        public AudioClip DeathClip;
 
         /// <summary>
         /// Current health total
@@ -68,10 +74,10 @@ namespace Assets.Scripts
         {
             if (IsDisposed) return;
 
-            if (AudioSource != null)
+            if (DeathClip != null)
             {
-                AudioSource.Play();
-                delay = AudioSource.clip.length;
+                AudioSource.PlayOneShot(DeathClip);
+                delay = DeathClip.length;
                 var render = GetComponent<Renderer>();
                 render.enabled = false;
             }

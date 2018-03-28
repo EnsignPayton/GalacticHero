@@ -98,7 +98,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -182,6 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 2
   MoveSpeed: 0.5
+  DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
   BlinkSprite: {fileID: 21300002, guid: 46152574552d0fa41a8bded0a33d5077, type: 3}
   ScreenBoundOffset: 0.1
 --- !u!212 &212165196736272408

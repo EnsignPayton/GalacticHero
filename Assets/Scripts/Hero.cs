@@ -8,12 +8,21 @@ namespace Assets.Scripts
     [RequireComponent(typeof(SpriteRenderer))]
     public class Hero : Entity
     {
+        /// <summary>
+        /// Maximum number of shots allowed on screen
+        /// </summary>
         public int MaximumShots = 5;
-        public GameObject ShotPrefab = null;
+
+        /// <summary>
+        /// Shot object prefab
+        /// </summary>
+        public GameObject ShotPrefab;
+
+        public AudioClip ShootClip;
 
         private SpriteRenderer _spriteRenderer;
+        private AudioSource _audioSource;
         private IList<Shot> _shots;
-
         #region Script Overrides
 
         protected override void Start()
@@ -23,6 +32,7 @@ namespace Assets.Scripts
 
             _shots = new List<Shot>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
+            _audioSource = GetComponent<AudioSource>();
 
             base.Start();
         }
@@ -100,6 +110,8 @@ namespace Assets.Scripts
                 shot.IsLeft = isLeft;
                 shot.transform.position = transform.position;
                 _shots.Add(shot);
+
+                _audioSource.PlayOneShot(ShootClip);
             }
         }
 
