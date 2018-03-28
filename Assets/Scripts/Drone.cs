@@ -3,24 +3,23 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    [RequireComponent(typeof(SpriteRenderer))]
-    [RequireComponent(typeof(Collider2D))]
-    public class Drone : Script
+    public class Drone : Entity
     {
         public Sprite BlinkSprite;
-        public int MaxHealth = 1;
 
-        private SpriteRenderer SpriteRenderer { get; set; }
-        private Sprite NormalSprite { get; set; }
-        private bool IsReady { get; set; }
-        private int Health { get; set; }
+        private SpriteRenderer _spriteRenderer;
+        private Sprite _normalSprite;
+        private bool _isReady;
+        private Vector3 _velocity;
 
         protected override void Start()
         {
-            SpriteRenderer = GetComponent<SpriteRenderer>();
-            NormalSprite = SpriteRenderer.sprite;
-            IsReady = false;
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _normalSprite = _spriteRenderer.sprite;
+            _isReady = false;
             Health = MaxHealth;
+
+            base.Start();
 
             StartCoroutine(Blink());
         }
@@ -32,19 +31,9 @@ namespace Assets.Scripts
                 Dispose();
             }
 
-            if (IsReady)
-            {
-            }
-        }
+            if (!_isReady) return;
 
-        protected override void OnTriggerEnter2D(Collider2D triggerCollider)
-        {
-            var shot = triggerCollider.GetComponent<Shot>();
-            if (shot != null && shot.IsPlayer)
-            {
-                Health--;
-                shot.Dispose();
-            }
+            // TODO: Movement AI
         }
 
         // On start, pauses and blinks before acting
@@ -53,12 +42,12 @@ namespace Assets.Scripts
             yield return new WaitForSeconds(1.0f);
 
             // Set blink texture
-            SpriteRenderer.sprite = BlinkSprite;
+            _spriteRenderer.sprite = BlinkSprite;
 
             yield return new WaitForSeconds(1.0f);
 
-            SpriteRenderer.sprite = NormalSprite;
-            IsReady = true;
+            _spriteRenderer.sprite = _normalSprite;
+            _isReady = true;
 
             yield return null;
         }

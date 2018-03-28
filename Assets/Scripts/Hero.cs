@@ -5,17 +5,13 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    [RequireComponent(typeof(SpriteRenderer))]
-    [RequireComponent(typeof(Collider2D))]
-    public class Hero : Script
+    public class Hero : Entity
     {
-        public float MoveSpeed = 1.0f;
         public int MaximumShots = 5;
         public GameObject ShotPrefab = null;
 
-        public IList<Shot> Shots { get; set; }
-        private SpriteRenderer SpriteRenderer { get; set; }
-        private BoxCollider2D Collider { get; set; }
+        private SpriteRenderer _spriteRenderer;
+        private IList<Shot> _shots;
 
         #region Script Overrides
 
@@ -24,28 +20,18 @@ namespace Assets.Scripts
             if (ShotPrefab == null)
                 Debug.LogError("Shot prefab undefined.");
 
-            Shots = new List<Shot>();
-            SpriteRenderer = GetComponent<SpriteRenderer>();
-            Collider = GetComponent<BoxCollider2D>();
+            _shots = new List<Shot>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+
+            base.Start();
         }
 
         protected override void Update()
         {
             Move();
             Shoot();
-        }
 
-        protected override void OnCollisionEnter2D(Collision2D collision)
-        {
-        }
-
-        protected override void OnTriggerEnter2D(Collider2D triggerCollider)
-        {
-            var shot = triggerCollider.GetComponent<Shot>();
-            if (shot != null && !shot.IsPlayer)
-            {
-                // Hit
-            }
+            base.Update();
         }
 
         #endregion
@@ -87,19 +73,19 @@ namespace Assets.Scripts
             else
                 return;
 
-            SpriteRenderer.flipX = isLeft;
+            _spriteRenderer.flipX = isLeft;
 
             // Clean up old shots
-            Shots = Shots.Where(x => x != null).ToList();
+            _shots = _shots.Where(x => x != null).ToList();
 
-            if (Shots.Count < MaximumShots)
+            if (_shots.Count < MaximumShots)
             {
                 var shotPrefab = Instantiate(ShotPrefab);
                 var shot = shotPrefab.GetComponent<Shot>();
-                shot.IsPlayer = true;
+                shot.Source = this;
                 shot.IsLeft = isLeft;
                 shot.transform.position = transform.position;
-                Shots.Add(shot);
+                _shots.Add(shot);
             }
         }
     }

@@ -4,9 +4,12 @@ namespace Assets.Scripts
 {
     public class Shot : Script
     {
-        public float Speed = 4.0f;
+        /// <summary>
+        /// Horizontal speed
+        /// </summary>
+        public float Speed = 1.0f;
 
-        public bool IsPlayer { get; set; }
+        public Entity Source { get; set; }
         public bool IsLeft { get; set; }
 
         protected override void Update()
