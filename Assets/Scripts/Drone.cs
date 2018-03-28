@@ -12,6 +12,8 @@ namespace Assets.Scripts
         private bool _isReady;
         private Vector3 _velocity;
 
+        #region Script Overrides
+
         protected override void Start()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -26,15 +28,15 @@ namespace Assets.Scripts
 
         protected override void Update()
         {
-            if (Health <= 0)
-            {
-                Dispose();
-            }
 
             if (!_isReady) return;
 
             // TODO: Movement AI
+
+            base.Update();
         }
+
+        #endregion
 
         // On start, pauses and blinks before acting
         private IEnumerator Blink()

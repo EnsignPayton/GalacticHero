@@ -36,6 +36,8 @@ namespace Assets.Scripts
 
         #endregion
 
+        #region Methods
+
         private void Move()
         {
             var velocity = new Vector3();
@@ -88,5 +90,7 @@ namespace Assets.Scripts
                 _shots.Add(shot);
             }
         }
+
+        #endregion
     }
 }

@@ -21,6 +21,8 @@ namespace Assets.Scripts
         /// </summary>
         public int Health { get; set; }
 
+        #region Script Overrides
+
         /// <summary>
         /// Set health to max on start
         /// </summary>
@@ -54,5 +56,7 @@ namespace Assets.Scripts
 
             base.OnTriggerEnter2D(triggerCollider);
         }
+
+        #endregion
     }
 }
