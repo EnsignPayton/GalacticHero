@@ -18,15 +18,20 @@ namespace Assets.Scripts
             transform.position += velocity * Time.deltaTime;
         }
 
-        protected override void OnDestroy()
+        protected override void OnBecameInvisible()
         {
-            if (Source != null)
-                Source.Shots.Remove(this);
+            Dispose();
         }
 
         protected override void OnCollisionEnter2D(Collision2D collision)
         {
             Dispose();
+        }
+
+        protected override void OnDestroy()
+        {
+            if (Source != null)
+                Source.Shots.Remove(this);
         }
     }
 }

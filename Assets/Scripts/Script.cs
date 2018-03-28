@@ -26,6 +26,13 @@ namespace Assets.Scripts
         }
 
         /// <summary>
+        /// OnBecameInvisible is called when the renderer is no longer visible by any camera.
+        /// </summary>
+        protected virtual void OnBecameInvisible()
+        {
+        }
+
+        /// <summary>
         /// This function is called when the MonoBehaviour will be destroyed.
         /// </summary>
         protected virtual void OnDestroy()
