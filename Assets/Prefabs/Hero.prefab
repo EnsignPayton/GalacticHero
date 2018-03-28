@@ -38,7 +38,7 @@ Transform:
   m_GameObject: {fileID: 1277272623674236}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 4, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0da018063e84741a560e273713f662, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 4
+  MoveSpeed: 1
   MaximumShots: 5
   ShotPrefab: {fileID: 1942292983929450, guid: b81bc0e951bf6f94792f2f8ce41b8d27, type: 2}
 --- !u!212 &212763538026986626

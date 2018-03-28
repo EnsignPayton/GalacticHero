@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    [RequireComponent(typeof(BoxCollider2D))]
+    [RequireComponent(typeof(Collider2D))]
     public class Hero : Script
     {
         public float MoveSpeed = 1.0f;
@@ -66,6 +67,11 @@ namespace Assets.Scripts
                 velocity.y = -MoveSpeed;
             else
                 velocity.y = 0.0f;
+
+            if (Math.Abs(velocity.x) > 0.001f && Math.Abs(velocity.y) > 0.001f)
+            {
+                velocity *= (2.0f / 3.0f);
+            }
 
             transform.position += velocity * Time.deltaTime;
         }
