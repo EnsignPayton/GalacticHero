@@ -6,9 +6,7 @@ namespace Assets.Scripts
     {
         public float Speed = 4.0f;
 
-        // TODO: Think this through and fix it
         public bool IsPlayer { get; set; }
-        public Hero Source { get; set; }
         public bool IsLeft { get; set; }
 
         protected override void Update()
@@ -20,18 +18,14 @@ namespace Assets.Scripts
 
         protected override void OnBecameInvisible()
         {
+            // Destroy when shot goes offscreen
             Dispose();
         }
 
         protected override void OnCollisionEnter2D(Collision2D collision)
         {
+            // Destroy when shot collides with a solid object
             Dispose();
-        }
-
-        protected override void OnDestroy()
-        {
-            if (Source != null)
-                Source.Shots.Remove(this);
         }
     }
 }

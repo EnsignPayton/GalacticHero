@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -35,7 +36,6 @@ namespace Assets.Scripts
 
         protected override void OnCollisionEnter2D(Collision2D collision)
         {
-            Debug.Log("Collision Detected - Need to handle this maybe");
         }
 
         protected override void OnTriggerEnter2D(Collider2D triggerCollider)
@@ -43,7 +43,7 @@ namespace Assets.Scripts
             var shot = triggerCollider.GetComponent<Shot>();
             if (shot != null && !shot.IsPlayer)
             {
-                Debug.Log("I'm hit!");
+                // Hit
             }
         }
 
@@ -83,12 +83,14 @@ namespace Assets.Scripts
 
             SpriteRenderer.flipX = isLeft;
 
+            // Clean up old shots
+            Shots = Shots.Where(x => x != null).ToList();
+
             if (Shots.Count < MaximumShots)
             {
                 var shotPrefab = Instantiate(ShotPrefab);
                 var shot = shotPrefab.GetComponent<Shot>();
                 shot.IsPlayer = true;
-                shot.Source = this;
                 shot.IsLeft = isLeft;
                 shot.transform.position = transform.position;
                 Shots.Add(shot);
