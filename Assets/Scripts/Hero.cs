@@ -35,6 +35,17 @@ namespace Assets.Scripts
             base.Update();
         }
 
+        protected override void OnTriggerEnter2D(Collider2D triggerCollider)
+        {
+            var enemy = triggerCollider.GetComponent<Drone>();
+            if (enemy != null)
+            {
+                Health--;
+            }
+
+            base.OnTriggerEnter2D(triggerCollider);
+        }
+
         #endregion
 
         #region Methods
