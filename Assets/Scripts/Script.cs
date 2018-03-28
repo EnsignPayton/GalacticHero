@@ -57,17 +57,22 @@ namespace Assets.Scripts
 
         #region IDisposable
 
+        protected bool IsDisposed { get; set; }
+
         public void Dispose()
         {
             Dispose(true);
             //GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing, float delay = 0.0f)
         {
+            if (IsDisposed) return;
+
+            IsDisposed = true;
             if (disposing)
             {
-                Destroy(gameObject);
+                Destroy(gameObject, delay);
             }
         }
 

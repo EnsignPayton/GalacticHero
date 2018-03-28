@@ -20,6 +20,8 @@ namespace Assets.Scripts
         /// </summary>
         public int Health { get; set; }
 
+        protected AudioSource AudioSource { get; set; }
+
         #region Script Overrides
 
         /// <summary>
@@ -28,6 +30,7 @@ namespace Assets.Scripts
         protected override void Start()
         {
             Health = MaxHealth;
+            AudioSource = GetComponent<AudioSource>();
             base.Start();
         }
 
@@ -54,6 +57,26 @@ namespace Assets.Scripts
             }
 
             base.OnTriggerEnter2D(triggerCollider);
+        }
+
+        /// <summary>
+        /// Play death sound and delay disposal until its done
+        /// </summary>
+        /// <param name="disposing"></param>
+        /// <param name="delay"></param>
+        protected override void Dispose(bool disposing, float delay = 0)
+        {
+            if (IsDisposed) return;
+
+            if (AudioSource != null)
+            {
+                AudioSource.Play();
+                delay = AudioSource.clip.length;
+                var render = GetComponent<Renderer>();
+                render.enabled = false;
+            }
+
+            base.Dispose(disposing, delay);
         }
 
         #endregion
