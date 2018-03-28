@@ -1,29 +1,53 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
     [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(BoxCollider2D))]
-    public class Hero : MonoBehaviour
+    public class Hero : Script
     {
         public float MoveSpeed = 1.0f;
+        public int MaximumShots = 5;
         public GameObject ShotPrefab = null;
 
+        public IList<Shot> Shots { get; set; }
         private SpriteRenderer SpriteRenderer { get; set; }
+        private BoxCollider2D Collider { get; set; }
 
-        public void Start()
+        #region Script Overrides
+
+        protected override void Start()
         {
-            SpriteRenderer = GetComponent<SpriteRenderer>();
-
             if (ShotPrefab == null)
                 Debug.LogError("Shot prefab undefined.");
+
+            Shots = new List<Shot>();
+            SpriteRenderer = GetComponent<SpriteRenderer>();
+            Collider = GetComponent<BoxCollider2D>();
         }
 
-        public void Update()
+        protected override void Update()
         {
             Move();
             Shoot();
         }
+
+        protected override void OnCollisionEnter2D(Collision2D collision)
+        {
+            Debug.Log("Collision Detected - Need to handle this maybe");
+        }
+
+        protected override void OnTriggerEnter2D(Collider2D triggerCollider)
+        {
+            var shot = triggerCollider.GetComponent<Shot>();
+            if (shot != null && !shot.IsPlayer)
+            {
+                Debug.Log("I'm hit!");
+            }
+        }
+
+        #endregion
 
         private void Move()
         {
@@ -59,8 +83,16 @@ namespace Assets.Scripts
 
             SpriteRenderer.flipX = isLeft;
 
-            var shot = Instantiate(ShotPrefab);
-            shot.transform.position = transform.position;
+            if (Shots.Count < MaximumShots)
+            {
+                var shotPrefab = Instantiate(ShotPrefab);
+                var shot = shotPrefab.GetComponent<Shot>();
+                shot.IsPlayer = true;
+                shot.Source = this;
+                shot.IsLeft = isLeft;
+                shot.transform.position = transform.position;
+                Shots.Add(shot);
+            }
         }
     }
 }
