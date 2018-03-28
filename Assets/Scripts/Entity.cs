@@ -2,7 +2,6 @@
 
 namespace Assets.Scripts
 {
-    [RequireComponent(typeof(SpriteRenderer))]
     [RequireComponent(typeof(Collider2D))]
     public class Entity : Script
     {

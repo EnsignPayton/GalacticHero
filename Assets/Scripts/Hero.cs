@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+    [RequireComponent(typeof(SpriteRenderer))]
     public class Hero : Entity
     {
         public int MaximumShots = 5;

@@ -3,9 +3,11 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+    [RequireComponent(typeof(SpriteRenderer))]
     public class Drone : Entity
     {
         public Sprite BlinkSprite;
+        public float ScreenBoundOffset;
 
         private SpriteRenderer _spriteRenderer;
         private Sprite _normalSprite;
@@ -19,7 +21,7 @@ namespace Assets.Scripts
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _normalSprite = _spriteRenderer.sprite;
             _isReady = false;
-            Health = MaxHealth;
+            _velocity = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized * MoveSpeed;
 
             base.Start();
 
@@ -28,10 +30,22 @@ namespace Assets.Scripts
 
         protected override void Update()
         {
+            if (_isReady)
+            {
+                var position = Camera.main.WorldToViewportPoint(transform.position);
 
-            if (!_isReady) return;
+                if (position.x <= ScreenBoundOffset || position.x >= 1.0f - ScreenBoundOffset)
+                {
+                    _velocity.x = -_velocity.x;
+                }
 
-            // TODO: Movement AI
+                if (position.y <= ScreenBoundOffset || position.y >= 1.0f - ScreenBoundOffset)
+                {
+                    _velocity.y = -_velocity.y;
+                }
+
+                transform.position += _velocity * Time.deltaTime;
+            }
 
             base.Update();
         }

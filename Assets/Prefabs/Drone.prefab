@@ -99,8 +99,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e1a8dacd617d8842b29409fa805b486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BlinkSprite: {fileID: 21300002, guid: 46152574552d0fa41a8bded0a33d5077, type: 3}
   MaxHealth: 5
+  MoveSpeed: 0.5
+  BlinkSprite: {fileID: 21300002, guid: 46152574552d0fa41a8bded0a33d5077, type: 3}
+  ScreenBoundOffset: 0.1
 --- !u!212 &212165196736272408
 SpriteRenderer:
   m_ObjectHideFlags: 1
