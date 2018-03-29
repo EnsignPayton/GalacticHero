@@ -5,7 +5,9 @@ licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
+  - BlinkSprite: {fileID: 21300002, guid: 46152574552d0fa41a8bded0a33d5077, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
