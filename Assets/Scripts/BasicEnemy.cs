@@ -6,13 +6,39 @@ namespace Assets.Scripts
     [RequireComponent(typeof(SpriteRenderer))]
     public class BasicEnemy : Entity
     {
+        #region Fields
+
+        /// <summary>
+        /// Sprite to use when running a blink on initialization.
+        /// </summary>
         public Sprite BlinkSprite;
+
+        /// <summary>
+        /// Percent distance from edge of the screen to turn around.
+        /// </summary>
         public float ScreenBoundOffset;
 
+        /// <summary>
+        /// SpriteRenderer component
+        /// </summary>
         protected SpriteRenderer SpriteRenderer;
+
+        /// <summary>
+        /// Default sprite
+        /// </summary>
         protected Sprite NormalSprite;
+
+        /// <summary>
+        /// Ready to move and attack
+        /// </summary>
         protected bool IsReady;
+
+        /// <summary>
+        /// Velocity used for movement AI
+        /// </summary>
         protected Vector3 Velocity;
+
+        #endregion
 
         #region Script Overrides
 
@@ -48,6 +74,8 @@ namespace Assets.Scripts
         }
 
         #endregion
+
+        #region Virtual Methods
 
         /// <summary>
         /// On Start, pauses and blinks before taking action.
@@ -93,5 +121,7 @@ namespace Assets.Scripts
         {
             transform.position += Velocity * Time.deltaTime;
         }
+
+        #endregion
     }
 }

@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 61408152661195124}
   - component: {fileID: 82709788942750484}
   - component: {fileID: 114316662837303234}
+  - component: {fileID: 114579957544849888}
   m_Layer: 0
   m_Name: Hunter
   m_TagString: Untagged
@@ -185,6 +186,24 @@ MonoBehaviour:
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
   BlinkSprite: {fileID: 21300002, guid: 9059e2d2843f8ec419781081e57a849e, type: 3}
   ScreenBoundOffset: 0.1
+--- !u!114 &114579957544849888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1275197098615606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2439d000c2111d44a84f343c4fdbdfb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 6
+  MoveSpeed: 0.75
+  DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
+  BlinkSprite: {fileID: 21300002, guid: 9059e2d2843f8ec419781081e57a849e, type: 3}
+  ScreenBoundOffset: 0.1
+  LeftSprite: {fileID: 21300004, guid: 9059e2d2843f8ec419781081e57a849e, type: 3}
+  RightSprite: {fileID: 21300006, guid: 9059e2d2843f8ec419781081e57a849e, type: 3}
 --- !u!212 &212464983792477760
 SpriteRenderer:
   m_ObjectHideFlags: 1
