@@ -4,7 +4,7 @@ namespace Assets.Scripts
 {
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(AudioSource))]
-    public class Entity : Script
+    public abstract class Entity : Script
     {
         /// <summary>
         /// Maximum health total
