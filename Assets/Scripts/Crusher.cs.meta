@@ -1,12 +1,11 @@
 fileFormatVersion: 2
-guid: d3710de6c60fb814c9d0bbfd0964e75f
-timeCreated: 1522207241
+guid: bd961bb26e31ead499fbb6fdb81a1438
+timeCreated: 1522351753
 licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences:
-  - DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
+  defaultReferences: []
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

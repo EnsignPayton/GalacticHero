@@ -4,8 +4,10 @@ namespace Assets.Scripts
 {
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(AudioSource))]
-    public class Entity : Script
+    public abstract class Entity : Script
     {
+        #region Fields
+
         /// <summary>
         /// Maximum health total
         /// </summary>
@@ -22,11 +24,16 @@ namespace Assets.Scripts
         public AudioClip DeathClip;
 
         /// <summary>
+        /// AudioSource component
+        /// </summary>
+        protected AudioSource AudioSource;
+
+        #endregion
+
+        /// <summary>
         /// Current health total
         /// </summary>
         public int Health { get; set; }
-
-        protected AudioSource AudioSource { get; set; }
 
         #region Script Overrides
 

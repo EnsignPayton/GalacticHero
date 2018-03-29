@@ -47,7 +47,7 @@ namespace Assets.Scripts
 
         protected override void OnTriggerEnter2D(Collider2D triggerCollider)
         {
-            var enemy = triggerCollider.GetComponent<Drone>();
+            var enemy = triggerCollider.GetComponent<BasicEnemy>();
             if (enemy != null)
             {
                 Health--;

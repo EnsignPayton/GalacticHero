@@ -5,7 +5,11 @@ licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - DeathClip: {instanceID: 0}
+  - ShotPrefab: {fileID: 1942292983929450, guid: b81bc0e951bf6f94792f2f8ce41b8d27,
+      type: 2}
+  - ShootClip: {fileID: 8300000, guid: d36a791823e941e47ac701346297f2e9, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
