@@ -21,12 +21,16 @@ namespace Assets.Scripts
             if (IsReady)
             {
                 // Set sprite based on velocity
-                if (Velocity.x < -0.001f)
+                if (Velocity.x < 0.0f && SpriteRenderer.sprite != LeftSprite)
+                {
+                    Debug.Log("Set Hunter Left");
                     SpriteRenderer.sprite = LeftSprite;
-                else if (Velocity.x > 0.001f)
+                }
+                else if (Velocity.x > 0.0f && SpriteRenderer.sprite != RightSprite)
+                {
+                    Debug.Log("Set Hunter Right");
                     SpriteRenderer.sprite = RightSprite;
-                else
-                    SpriteRenderer.sprite = NormalSprite;
+                }
             }
         }
     }
