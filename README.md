@@ -8,4 +8,4 @@ This project is written for the free version of Unity 2017.3.1f1. You'll need Un
 
 ## Script Design
 
-Scripting on this project was parially an excercise on inheritance. All scripts which can be added to a GameObject inherit from [Script](Assets/Scripts/Script.cs), which wraps MonoBehaviour in a nice OOP way.
+Scripting on this project was parially an excercise on inheritance. All scripts which can be added to a GameObject inherit from [Script](Assets/Scripts/Script.cs), which wraps MonoBehaviour in a nice OOP way. From here, all objects that can move and have a health total derive from [Entity](Assets/Scripts/Entity.cs).
