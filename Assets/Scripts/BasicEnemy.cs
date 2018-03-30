@@ -103,12 +103,14 @@ namespace Assets.Scripts
         {
             var position = Camera.main.WorldToViewportPoint(transform.position);
 
-            if (position.x <= ScreenBoundOffset || position.x >= 1.0f - ScreenBoundOffset)
+            if ((position.x <= ScreenBoundOffset && Velocity.x < 0.0f) ||
+                (position.x >= 1.0f - ScreenBoundOffset && Velocity.x > 0.0f))
             {
                 Velocity.x = -Velocity.x;
             }
 
-            if (position.y <= ScreenBoundOffset || position.y >= 1.0f - ScreenBoundOffset)
+            if ((position.y <= ScreenBoundOffset && Velocity.y < 0.0f) ||
+                (position.y >= 1.0f - ScreenBoundOffset && Velocity.y > 0.0f))
             {
                 Velocity.y = -Velocity.y;
             }

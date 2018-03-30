@@ -23,12 +23,10 @@ namespace Assets.Scripts
                 // Set sprite based on velocity
                 if (Velocity.x < 0.0f && SpriteRenderer.sprite != LeftSprite)
                 {
-                    Debug.Log("Set Reaver Left");
                     SpriteRenderer.sprite = LeftSprite;
                 }
                 else if (Velocity.x > 0.0f && SpriteRenderer.sprite != RightSprite)
                 {
-                    Debug.Log("Set Reaver Right");
                     SpriteRenderer.sprite = RightSprite;
                 }
             }
