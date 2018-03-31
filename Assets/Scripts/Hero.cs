@@ -23,7 +23,6 @@ namespace Assets.Scripts
         private SpriteRenderer _spriteRenderer;
         private AudioSource _audioSource;
         private IList<Shot> _shots;
-        private Direction _blockCollision;
 
         #region Script Overrides
 
@@ -35,7 +34,6 @@ namespace Assets.Scripts
             _shots = new List<Shot>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _audioSource = GetComponent<AudioSource>();
-            _blockCollision = Direction.None;
 
             base.Start();
         }
@@ -56,58 +54,7 @@ namespace Assets.Scripts
                 Health--;
             }
 
-            var block = triggerCollider.GetComponent<Block>();
-            if (block != null)
-            {
-                if (triggerCollider == block.LeftCollider)
-                {
-                    _blockCollision |= Direction.Left;
-                }
-                else if (triggerCollider == block.TopCollider)
-                {
-                    _blockCollision |= Direction.Top;
-                }
-                else if (triggerCollider == block.RightCollider)
-                {
-                    _blockCollision |= Direction.Right;
-                }
-                else if (triggerCollider == block.BottomCollider)
-                {
-                    _blockCollision |= Direction.Bottom;
-                }
-
-                Debug.Log(_blockCollision);
-            }
-
             base.OnTriggerEnter2D(triggerCollider);
-        }
-
-        protected override void OnTriggerExit2D(Collider2D triggerCollider)
-        {
-            var block = triggerCollider.GetComponent<Block>();
-            if (block != null)
-            {
-                if (triggerCollider == block.LeftCollider)
-                {
-                    _blockCollision &= ~Direction.Left;
-                }
-                else if (triggerCollider == block.TopCollider)
-                {
-                    _blockCollision &= ~Direction.Top;
-                }
-                else if (triggerCollider == block.RightCollider)
-                {
-                    _blockCollision &= ~Direction.Right;
-                }
-                else if (triggerCollider == block.BottomCollider)
-                {
-                    _blockCollision &= ~Direction.Bottom;
-                }
-
-                Debug.Log(_blockCollision);
-            }
-
-            base.OnTriggerExit2D(triggerCollider);
         }
 
         #endregion
@@ -132,26 +79,26 @@ namespace Assets.Scripts
             else
                 velocity.y = 0.0f;
 
-            if ((_blockCollision & Direction.Top) == Direction.Top &&
-                (_blockCollision & Direction.Bottom) != Direction.Bottom && velocity.y < 0.0f)
+            if ((WallDirection & Direction.Top) == Direction.Top &&
+                (WallDirection & Direction.Bottom) != Direction.Bottom && velocity.y < 0.0f)
             {
                 velocity.y = 0.0f;
             }
 
-            if ((_blockCollision & Direction.Bottom) == Direction.Bottom &&
-                (_blockCollision & Direction.Top) != Direction.Top && velocity.y > 0.0f)
+            if ((WallDirection & Direction.Bottom) == Direction.Bottom &&
+                (WallDirection & Direction.Top) != Direction.Top && velocity.y > 0.0f)
             {
                 velocity.y = 0.0f;
             }
 
-            if ((_blockCollision & Direction.Left) == Direction.Left &&
-                (_blockCollision & Direction.Right) != Direction.Right && velocity.x > 0.0f)
+            if ((WallDirection & Direction.Left) == Direction.Left &&
+                (WallDirection & Direction.Right) != Direction.Right && velocity.x > 0.0f)
             {
                 velocity.x = 0.0f;
             }
 
-            if ((_blockCollision & Direction.Right) == Direction.Right &&
-                (_blockCollision & Direction.Left) != Direction.Left && velocity.x < 0.0f)
+            if ((WallDirection & Direction.Right) == Direction.Right &&
+                (WallDirection & Direction.Left) != Direction.Left && velocity.x < 0.0f)
             {
                 velocity.x = 0.0f;
             }
