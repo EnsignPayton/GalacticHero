@@ -103,6 +103,8 @@ namespace Assets.Scripts
                 {
                     _blockCollision &= ~Direction.Bottom;
                 }
+
+                Debug.Log(_blockCollision);
             }
 
             base.OnTriggerExit2D(triggerCollider);
