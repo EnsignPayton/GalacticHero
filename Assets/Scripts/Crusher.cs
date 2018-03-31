@@ -24,6 +24,7 @@ namespace Assets.Scripts
             {
                 var position = Camera.main.WorldToViewportPoint(transform.position);
 
+                // TODO: Check if heading toward the player would go through a collider. If so, just bounce off.
                 if (position.x <= ScreenBoundOffset || position.x >= 1.0f - ScreenBoundOffset ||
                     position.y <= ScreenBoundOffset || position.y >= 1.0f - ScreenBoundOffset)
                 {

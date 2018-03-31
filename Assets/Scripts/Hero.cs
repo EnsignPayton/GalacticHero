@@ -23,6 +23,7 @@ namespace Assets.Scripts
         private SpriteRenderer _spriteRenderer;
         private AudioSource _audioSource;
         private IList<Shot> _shots;
+
         #region Script Overrides
 
         protected override void Start()
@@ -77,6 +78,31 @@ namespace Assets.Scripts
                 velocity.y = -MoveSpeed;
             else
                 velocity.y = 0.0f;
+
+            if ((WallDirection & Direction.Top) == Direction.Top &&
+                (WallDirection & Direction.Bottom) != Direction.Bottom && velocity.y < 0.0f)
+            {
+                velocity.y = 0.0f;
+            }
+
+            if ((WallDirection & Direction.Bottom) == Direction.Bottom &&
+                (WallDirection & Direction.Top) != Direction.Top && velocity.y > 0.0f)
+            {
+                velocity.y = 0.0f;
+            }
+
+            if ((WallDirection & Direction.Left) == Direction.Left &&
+                (WallDirection & Direction.Right) != Direction.Right && velocity.x > 0.0f)
+            {
+                velocity.x = 0.0f;
+            }
+
+            if ((WallDirection & Direction.Right) == Direction.Right &&
+                (WallDirection & Direction.Left) != Direction.Left && velocity.x < 0.0f)
+            {
+                velocity.x = 0.0f;
+            }
+
 
             if (Math.Abs(velocity.x) > 0.001f && Math.Abs(velocity.y) > 0.001f)
             {
