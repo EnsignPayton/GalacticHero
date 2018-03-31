@@ -6,6 +6,12 @@ namespace Assets.Scripts
     [RequireComponent(typeof(Collider2D))]
     public class Block : Script
     {
-        // Placeholder for now
+        public Collider2D LeftCollider;
+
+        public Collider2D TopCollider;
+
+        public Collider2D RightCollider;
+
+        public Collider2D BottomCollider;
     }
 }

@@ -53,6 +53,13 @@ namespace Assets.Scripts
         {
         }
 
+        /// <summary>
+        /// Sent when another object leaves a trigger collider attached to this object (2D physics only).
+        /// </summary>
+        protected virtual void OnTriggerExit2D(Collider2D triggerCollider)
+        {
+        }
+
         #endregion
 
         #region IDisposable

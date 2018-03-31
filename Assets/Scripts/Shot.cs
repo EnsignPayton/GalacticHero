@@ -55,6 +55,20 @@ namespace Assets.Scripts
             base.OnCollisionEnter2D(collision);
         }
 
+        /// <summary>
+        /// Destroy the shot when it collides with a wall (in the case we define walls as triggers)
+        /// </summary>
+        /// <param name="triggerCollider">Trigger Collider</param>
+        protected override void OnTriggerEnter2D(Collider2D triggerCollider)
+        {
+            if (triggerCollider.GetComponent<Block>())
+            {
+                Dispose();
+            }
+
+            base.OnTriggerEnter2D(triggerCollider);
+        }
+
         #endregion
     }
 }
