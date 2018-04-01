@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Entities
 {
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(AudioSource))]
@@ -27,11 +27,6 @@ namespace Assets.Scripts
         /// AudioSource component
         /// </summary>
         protected AudioSource AudioSource;
-
-        /// <summary>
-        /// Wall collision direction
-        /// </summary>
-        protected Direction WallDirection = Direction.None;
 
         #endregion
 
@@ -61,6 +56,18 @@ namespace Assets.Scripts
             base.Update();
         }
 
+        protected override void OnCollisionEnter2D(Collision2D collision)
+        {
+            var shot = collision.collider.GetComponent<Shot>();
+            if (shot != null && shot.Source != null && shot.Source != this)
+            {
+                Health--;
+                shot.Dispose();
+            }
+
+            base.OnCollisionEnter2D(collision);
+        }
+
         /// <summary>
         /// Reacts to being hit
         /// </summary>
@@ -74,54 +81,7 @@ namespace Assets.Scripts
                 shot.Dispose();
             }
 
-            var block = triggerCollider.GetComponent<Block>();
-            if (block != null)
-            {
-                if (triggerCollider == block.LeftCollider)
-                {
-                    WallDirection |= Direction.Left;
-                }
-                else if (triggerCollider == block.TopCollider)
-                {
-                    WallDirection |= Direction.Top;
-                }
-                else if (triggerCollider == block.RightCollider)
-                {
-                    WallDirection |= Direction.Right;
-                }
-                else if (triggerCollider == block.BottomCollider)
-                {
-                    WallDirection |= Direction.Bottom;
-                }
-            }
-
             base.OnTriggerEnter2D(triggerCollider);
-        }
-
-        protected override void OnTriggerExit2D(Collider2D triggerCollider)
-        {
-            var block = triggerCollider.GetComponent<Block>();
-            if (block != null)
-            {
-                if (triggerCollider == block.LeftCollider)
-                {
-                    WallDirection &= ~Direction.Left;
-                }
-                else if (triggerCollider == block.TopCollider)
-                {
-                    WallDirection &= ~Direction.Top;
-                }
-                else if (triggerCollider == block.RightCollider)
-                {
-                    WallDirection &= ~Direction.Right;
-                }
-                else if (triggerCollider == block.BottomCollider)
-                {
-                    WallDirection &= ~Direction.Bottom;
-                }
-            }
-
-            base.OnTriggerExit2D(triggerCollider);
         }
 
         /// <summary>

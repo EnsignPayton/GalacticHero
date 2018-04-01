@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 61408152661195124}
   - component: {fileID: 82709788942750484}
   - component: {fileID: 114579957544849888}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Hunter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -184,7 +184,6 @@ MonoBehaviour:
   MoveSpeed: 0.75
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
   BlinkSprite: {fileID: 21300002, guid: 9059e2d2843f8ec419781081e57a849e, type: 3}
-  ScreenBoundOffset: 0.1
   LeftSprite: {fileID: 21300004, guid: 9059e2d2843f8ec419781081e57a849e, type: 3}
   RightSprite: {fileID: 21300006, guid: 9059e2d2843f8ec419781081e57a849e, type: 3}
 --- !u!212 &212464983792477760

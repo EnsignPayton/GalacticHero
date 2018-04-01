@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 61224677960839980}
   - component: {fileID: 82755479856861680}
   - component: {fileID: 114036785485377184}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Crusher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -184,7 +184,7 @@ MonoBehaviour:
   MoveSpeed: 1
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
   BlinkSprite: {fileID: 21300002, guid: e36ccb7eac691554cb76cc0ef147c8ab, type: 3}
-  ScreenBoundOffset: 0.1
+  FollowDelay: 2
 --- !u!212 &212022388711766042
 SpriteRenderer:
   m_ObjectHideFlags: 1
