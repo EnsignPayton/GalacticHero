@@ -1,8 +1,7 @@
 ﻿using System.Collections;
-using System.Linq;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Entities
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(SpriteRenderer))]
@@ -54,6 +53,7 @@ namespace Assets.Scripts
         /// </summary>
         protected override void Start()
         {
+            Rigidbody = GetComponent<Rigidbody2D>();
             SpriteRenderer = GetComponent<SpriteRenderer>();
             NormalSprite = SpriteRenderer.sprite;
             IsReady = false;
@@ -92,7 +92,7 @@ namespace Assets.Scripts
 
         protected override void OnCollisionEnter2D(Collision2D collision)
         {
-            // TODO: Bounds off
+            // TODO: Bounce
 
             base.OnCollisionEnter2D(collision);
         }

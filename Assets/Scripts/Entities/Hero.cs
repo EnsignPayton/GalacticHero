@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Entities
 {
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(SpriteRenderer))]
@@ -57,6 +56,17 @@ namespace Assets.Scripts
             _rigidbody.position += velocity * MoveSpeed * Time.deltaTime;
 
             base.FixedUpdate();
+        }
+
+        protected override void OnCollisionEnter2D(Collision2D collision)
+        {
+            var enemy = collision.collider.GetComponent<BasicEnemy>();
+            if (enemy != null)
+            {
+                Health--;
+            }
+
+            base.OnCollisionEnter2D(collision);
         }
 
         protected override void OnTriggerEnter2D(Collider2D triggerCollider)
