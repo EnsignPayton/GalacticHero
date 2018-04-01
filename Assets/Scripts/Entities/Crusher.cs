@@ -15,17 +15,15 @@ namespace Assets.Scripts.Entities
 
             // sets initial velocity toward the hero
             _hero = FindObjectOfType<Hero>();
-            if (_hero != null)
-            {
-                StartCoroutine(FollowHero());
-            }
+            StartCoroutine(FollowHero());
         }
 
         private IEnumerator FollowHero()
         {
             while (true)
             {
-                Velocity = (_hero.transform.position - transform.position).normalized * MoveSpeed;
+                if (_hero != null)
+                    Velocity = (_hero.transform.position - transform.position).normalized * MoveSpeed;
 
                 yield return new WaitForSeconds(FollowDelay);
             }
