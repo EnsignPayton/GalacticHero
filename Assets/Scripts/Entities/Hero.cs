@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -56,6 +57,13 @@ namespace Assets.Scripts.Entities
             _audioSource = GetComponent<AudioSource>();
 
             base.Start();
+
+            // Test some stuff out...
+
+            var size = Math.Min(Camera.main.pixelWidth, Camera.main.pixelHeight);
+            Camera.main.pixelRect = new Rect(0, 0, size, size);
+            //var grid = FindObjectOfType<Grid>();
+            //Camera.main.orthographicSize = grid.cellSize.x * 10;
         }
 
         protected override void Update()
