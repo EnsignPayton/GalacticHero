@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.Entities
 {
@@ -28,12 +29,13 @@ namespace Assets.Scripts.Entities
         /// </summary>
         protected AudioSource AudioSource;
 
-        #endregion
-
         /// <summary>
         /// Current health total
         /// </summary>
-        public int Health { get; set; }
+        [NonSerialized]
+        public int Health;
+
+        #endregion
 
         #region Script Overrides
 
