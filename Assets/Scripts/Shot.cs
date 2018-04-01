@@ -17,9 +17,9 @@ namespace Assets.Scripts
         public Entity Source { get; set; }
 
         /// <summary>
-        /// Left or right flag, will be removed when we suppport full 2D
+        /// Projectile direction
         /// </summary>
-        public bool IsLeft { get; set; }
+        public Vector2 Direction { get; set; }
 
         private Rigidbody2D _rigidbody;
 
@@ -37,9 +37,7 @@ namespace Assets.Scripts
 
         protected override void FixedUpdate()
         {
-            var velocity = new Vector2();
-            velocity.x = IsLeft ? -Speed : Speed;
-            _rigidbody.position += velocity * Time.deltaTime;
+            _rigidbody.position += Direction * Speed * Time.deltaTime;
 
             base.FixedUpdate();
         }

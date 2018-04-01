@@ -184,7 +184,10 @@ MonoBehaviour:
   MoveSpeed: 1
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
   MaximumShots: 5
+  FlameCooldown: 0.1
   ShotPrefab: {fileID: 1942292983929450, guid: b81bc0e951bf6f94792f2f8ce41b8d27, type: 2}
+  FlamePrefab: {fileID: 1186872647423974, guid: 5489fe591bb5be94fbb1df05cf61e4da,
+    type: 2}
   ShootClip: {fileID: 8300000, guid: d36a791823e941e47ac701346297f2e9, type: 3}
 --- !u!212 &212763538026986626
 SpriteRenderer:
