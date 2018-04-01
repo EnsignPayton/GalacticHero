@@ -92,7 +92,19 @@ namespace Assets.Scripts.Entities
 
         protected override void OnCollisionEnter2D(Collision2D collision)
         {
-            // TODO: Bounce
+            var shot = collision.collider.GetComponent<Shot>();
+            if (shot == null)
+            {
+                var direction = collision.collider.bounds.center - collision.otherCollider.bounds.center;
+                if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+                {
+                    Velocity.x = -Velocity.x;
+                }
+                else
+                {
+                    Velocity.y = -Velocity.y;
+                }
+            }
 
             base.OnCollisionEnter2D(collision);
         }

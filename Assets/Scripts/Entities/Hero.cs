@@ -69,17 +69,6 @@ namespace Assets.Scripts.Entities
             base.OnCollisionEnter2D(collision);
         }
 
-        protected override void OnTriggerEnter2D(Collider2D triggerCollider)
-        {
-            var enemy = triggerCollider.GetComponent<BasicEnemy>();
-            if (enemy != null)
-            {
-                Health--;
-            }
-
-            base.OnTriggerEnter2D(triggerCollider);
-        }
-
         #endregion
 
         #region Methods
