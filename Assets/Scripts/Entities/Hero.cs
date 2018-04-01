@@ -58,12 +58,9 @@ namespace Assets.Scripts.Entities
 
             base.Start();
 
-            // Test some stuff out...
-
-            var size = Math.Min(Camera.main.pixelWidth, Camera.main.pixelHeight);
-            Camera.main.pixelRect = new Rect(0, 0, size, size);
-            //var grid = FindObjectOfType<Grid>();
-            //Camera.main.orthographicSize = grid.cellSize.x * 10;
+            // TODO: Move to a more approprite script
+            Camera.main.pixelRect = new Rect((Camera.main.pixelWidth - Camera.main.pixelHeight) / 2, 0,
+                Camera.main.pixelHeight, Camera.main.pixelHeight);
         }
 
         protected override void Update()
