@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+    [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(SpriteRenderer))]
     public class Hero : Entity
     {
@@ -20,6 +21,8 @@ namespace Assets.Scripts
 
         public AudioClip ShootClip;
 
+        private Collider2D _collider;
+        private Rigidbody2D _rigidbody;
         private SpriteRenderer _spriteRenderer;
         private AudioSource _audioSource;
         private IList<Shot> _shots;
@@ -32,6 +35,8 @@ namespace Assets.Scripts
                 Debug.LogError("Shot prefab undefined.");
 
             _shots = new List<Shot>();
+            _collider = GetComponent<Collider2D>();
+            _rigidbody = GetComponent<Rigidbody2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _audioSource = GetComponent<AudioSource>();
 
@@ -40,10 +45,18 @@ namespace Assets.Scripts
 
         protected override void Update()
         {
-            Move();
             Shoot();
 
             base.Update();
+        }
+
+        protected override void FixedUpdate()
+        {
+            var velocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+            _rigidbody.position += velocity * MoveSpeed * Time.deltaTime;
+
+            base.FixedUpdate();
         }
 
         protected override void OnTriggerEnter2D(Collider2D triggerCollider)
@@ -60,57 +73,6 @@ namespace Assets.Scripts
         #endregion
 
         #region Methods
-
-        private void Move()
-        {
-            var velocity = new Vector3();
-
-            if (Input.GetKey(KeyCode.LeftArrow))
-                velocity.x = -MoveSpeed;
-            else if (Input.GetKey(KeyCode.RightArrow))
-                velocity.x = MoveSpeed;
-            else
-                velocity.x = 0.0f;
-
-            if (Input.GetKey(KeyCode.UpArrow))
-                velocity.y = MoveSpeed;
-            else if (Input.GetKey(KeyCode.DownArrow))
-                velocity.y = -MoveSpeed;
-            else
-                velocity.y = 0.0f;
-
-            if ((WallDirection & Direction.Top) == Direction.Top &&
-                (WallDirection & Direction.Bottom) != Direction.Bottom && velocity.y < 0.0f)
-            {
-                velocity.y = 0.0f;
-            }
-
-            if ((WallDirection & Direction.Bottom) == Direction.Bottom &&
-                (WallDirection & Direction.Top) != Direction.Top && velocity.y > 0.0f)
-            {
-                velocity.y = 0.0f;
-            }
-
-            if ((WallDirection & Direction.Left) == Direction.Left &&
-                (WallDirection & Direction.Right) != Direction.Right && velocity.x > 0.0f)
-            {
-                velocity.x = 0.0f;
-            }
-
-            if ((WallDirection & Direction.Right) == Direction.Right &&
-                (WallDirection & Direction.Left) != Direction.Left && velocity.x < 0.0f)
-            {
-                velocity.x = 0.0f;
-            }
-
-
-            if (Math.Abs(velocity.x) > 0.001f && Math.Abs(velocity.y) > 0.001f)
-            {
-                velocity *= (2.0f / 3.0f);
-            }
-
-            transform.position += velocity * Time.deltaTime;
-        }
 
         private void Shoot()
         {
@@ -131,10 +93,13 @@ namespace Assets.Scripts
             if (_shots.Count < MaximumShots)
             {
                 var shotPrefab = Instantiate(ShotPrefab);
+                var shotCollider = shotPrefab.GetComponent<Collider2D>();
+                Physics2D.IgnoreCollision(shotCollider, _collider);
                 var shot = shotPrefab.GetComponent<Shot>();
                 shot.Source = this;
                 shot.IsLeft = isLeft;
                 shot.transform.position = transform.position;
+
                 _shots.Add(shot);
 
                 _audioSource.PlayOneShot(ShootClip);

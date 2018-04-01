@@ -2,6 +2,7 @@
 
 namespace Assets.Scripts
 {
+    [RequireComponent(typeof(Rigidbody2D))]
     public class Shot : Script
     {
         /// <summary>
@@ -19,18 +20,27 @@ namespace Assets.Scripts
         /// </summary>
         public bool IsLeft { get; set; }
 
+        private Rigidbody2D _rigidbody;
+
         #region Script Overrides
 
         /// <summary>
-        /// Move the shot
+        /// Initialize
         /// </summary>
-        protected override void Update()
+        protected override void Start()
         {
-            var velocity = new Vector3();
-            velocity.x = IsLeft ? -Speed : Speed;
-            transform.position += velocity * Time.deltaTime;
+            _rigidbody = GetComponent<Rigidbody2D>();
 
-            base.Update();
+            base.Start();
+        }
+
+        protected override void FixedUpdate()
+        {
+            var velocity = new Vector2();
+            velocity.x = IsLeft ? -Speed : Speed;
+            _rigidbody.position += velocity * Time.deltaTime;
+
+            base.FixedUpdate();
         }
 
         /// <summary>
@@ -53,20 +63,6 @@ namespace Assets.Scripts
             Dispose();
 
             base.OnCollisionEnter2D(collision);
-        }
-
-        /// <summary>
-        /// Destroy the shot when it collides with a wall (in the case we define walls as triggers)
-        /// </summary>
-        /// <param name="triggerCollider">Trigger Collider</param>
-        protected override void OnTriggerEnter2D(Collider2D triggerCollider)
-        {
-            if (triggerCollider.GetComponent<Block>())
-            {
-                Dispose();
-            }
-
-            base.OnTriggerEnter2D(triggerCollider);
         }
 
         #endregion

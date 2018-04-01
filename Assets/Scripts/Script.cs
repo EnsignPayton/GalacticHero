@@ -26,6 +26,13 @@ namespace Assets.Scripts
         }
 
         /// <summary>
+        /// This function is called every fixed framerate frame, if the MonoBehaviour is enabled.
+        /// </summary>
+        protected virtual void FixedUpdate()
+        {
+        }
+
+        /// <summary>
         /// OnBecameInvisible is called when the renderer is no longer visible by any camera.
         /// </summary>
         protected virtual void OnBecameInvisible()
