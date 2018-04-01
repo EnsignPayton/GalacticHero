@@ -1,8 +1,10 @@
 ﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
+    [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(SpriteRenderer))]
     public class BasicEnemy : Entity
     {
@@ -36,7 +38,12 @@ namespace Assets.Scripts
         /// <summary>
         /// Velocity used for movement AI
         /// </summary>
-        protected Vector3 Velocity;
+        protected Vector2 Velocity;
+
+        /// <summary>
+        /// Rigidbody2D component
+        /// </summary>
+        protected Rigidbody2D Rigidbody;
 
         #endregion
 
@@ -50,7 +57,7 @@ namespace Assets.Scripts
             SpriteRenderer = GetComponent<SpriteRenderer>();
             NormalSprite = SpriteRenderer.sprite;
             IsReady = false;
-            Velocity = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized * MoveSpeed;
+            Velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized * MoveSpeed;
 
             base.Start();
 
@@ -58,19 +65,36 @@ namespace Assets.Scripts
         }
 
         /// <summary>
-        /// Sets velocity according to the basic movement AI found in <see cref="SetVelocity"/>,
-        /// calls the base update, and then applies the velocity to the position using <see cref="ApplyVelocity"/>.
-        /// Only runs movement AI if <see cref="IsReady"/> is true.
+        /// Sets velocity according to the basic movement AI found in <see cref="SetVelocity"/> if <see cref="IsReady"/> is true.
         /// </summary>
         protected override void Update()
         {
             if (IsReady)
+            {
                 SetVelocity();
+            }
 
             base.Update();
+        }
 
+        /// <summary>
+        /// Applies the set velocity if <see cref="IsReady"/> is true.
+        /// </summary>
+        protected override void FixedUpdate()
+        {
             if (IsReady)
-                ApplyVelocity();
+            {
+                Rigidbody.position += Velocity * Time.deltaTime;
+            }
+
+            base.FixedUpdate();
+        }
+
+        protected override void OnCollisionEnter2D(Collision2D collision)
+        {
+            // TODO: Bounds off
+
+            base.OnCollisionEnter2D(collision);
         }
 
         #endregion
@@ -104,28 +128,16 @@ namespace Assets.Scripts
             var position = Camera.main.WorldToViewportPoint(transform.position);
 
             if ((position.x <= ScreenBoundOffset && Velocity.x < 0.0f) ||
-                (position.x >= 1.0f - ScreenBoundOffset && Velocity.x > 0.0f) ||
-                (WallDirection & Direction.Left) == Direction.Left ||
-                (WallDirection & Direction.Right) == Direction.Right)
+                (position.x >= 1.0f - ScreenBoundOffset && Velocity.x > 0.0f))
             {
                 Velocity.x = -Velocity.x;
             }
 
             if ((position.y <= ScreenBoundOffset && Velocity.y < 0.0f) ||
-                (position.y >= 1.0f - ScreenBoundOffset && Velocity.y > 0.0f) ||
-                (WallDirection & Direction.Top) == Direction.Top ||
-                (WallDirection & Direction.Bottom) == Direction.Bottom)
+                (position.y >= 1.0f - ScreenBoundOffset && Velocity.y > 0.0f))
             {
                 Velocity.y = -Velocity.y;
             }
-        }
-
-        /// <summary>
-        /// Applies a velocity to the position, scaled to time.
-        /// </summary>
-        protected virtual void ApplyVelocity()
-        {
-            transform.position += Velocity * Time.deltaTime;
         }
 
         #endregion
