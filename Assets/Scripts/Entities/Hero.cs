@@ -100,9 +100,9 @@ namespace Assets.Scripts.Entities
         {
             bool isLeft;
 
-            if (Input.GetKeyDown(KeyCode.Z))
+            if (Input.GetButtonDown("Fire1"))
                 isLeft = true;
-            else if (Input.GetKeyDown(KeyCode.X))
+            else if (Input.GetButtonDown("Fire2"))
                 isLeft = false;
             else
                 return;

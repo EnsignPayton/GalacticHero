@@ -56,6 +56,10 @@ namespace Assets.Scripts.Entities
             base.Update();
         }
 
+        /// <summary>
+        /// React to being hit
+        /// </summary>
+        /// <param name="collision"></param>
         protected override void OnCollisionEnter2D(Collision2D collision)
         {
             var shot = collision.collider.GetComponent<Shot>();
@@ -69,26 +73,8 @@ namespace Assets.Scripts.Entities
         }
 
         /// <summary>
-        /// Reacts to being hit
-        /// </summary>
-        /// <param name="triggerCollider">Collision Object</param>
-        protected override void OnTriggerEnter2D(Collider2D triggerCollider)
-        {
-            var shot = triggerCollider.GetComponent<Shot>();
-            if (shot != null && shot.Source != null && shot.Source != this)
-            {
-                Health--;
-                shot.Dispose();
-            }
-
-            base.OnTriggerEnter2D(triggerCollider);
-        }
-
-        /// <summary>
         /// Play death sound and delay disposal until its done
         /// </summary>
-        /// <param name="disposing"></param>
-        /// <param name="delay"></param>
         protected override void Dispose(bool disposing, float delay = 0)
         {
             if (IsDisposed) return;
@@ -99,6 +85,9 @@ namespace Assets.Scripts.Entities
                 delay = DeathClip.length;
                 var render = GetComponent<Renderer>();
                 render.enabled = false;
+                var collider2d = GetComponent<Collider2D>();
+                collider2d.enabled = false;
+                enabled = false;
             }
 
             base.Dispose(disposing, delay);
