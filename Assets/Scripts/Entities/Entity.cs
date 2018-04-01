@@ -28,11 +28,6 @@ namespace Assets.Scripts.Entities
         /// </summary>
         protected AudioSource AudioSource;
 
-        /// <summary>
-        /// Wall collision direction
-        /// </summary>
-        protected Direction WallDirection = Direction.None;
-
         #endregion
 
         /// <summary>

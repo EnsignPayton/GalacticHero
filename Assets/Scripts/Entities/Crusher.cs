@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace Assets.Scripts.Entities
 {
     public class Crusher : BasicEnemy
     {
+        public float FollowDelay = 2.0f;
+
         private Hero _hero;
 
         protected override void Start()
@@ -14,27 +17,17 @@ namespace Assets.Scripts.Entities
             _hero = FindObjectOfType<Hero>();
             if (_hero != null)
             {
-                Velocity = (_hero.transform.position - transform.position).normalized * MoveSpeed;
+                StartCoroutine(FollowHero());
             }
         }
 
-        protected override void SetVelocity()
+        private IEnumerator FollowHero()
         {
-            if (_hero != null)
+            while (true)
             {
-                var position = Camera.main.WorldToViewportPoint(transform.position);
+                Velocity = (_hero.transform.position - transform.position).normalized * MoveSpeed;
 
-                // TODO: Check if heading toward the player would go through a collider. If so, just bounce off.
-                if (position.x <= ScreenBoundOffset || position.x >= 1.0f - ScreenBoundOffset ||
-                    position.y <= ScreenBoundOffset || position.y >= 1.0f - ScreenBoundOffset)
-                {
-                    Velocity = (_hero.transform.position - transform.position).normalized * MoveSpeed;
-                }
-            }
-            else
-            {
-                // Only call when no hero is found
-                base.SetVelocity();
+                yield return new WaitForSeconds(FollowDelay);
             }
         }
     }

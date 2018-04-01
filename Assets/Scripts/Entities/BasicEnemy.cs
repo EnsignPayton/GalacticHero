@@ -15,11 +15,6 @@ namespace Assets.Scripts.Entities
         public Sprite BlinkSprite;
 
         /// <summary>
-        /// Percent distance from edge of the screen to turn around.
-        /// </summary>
-        public float ScreenBoundOffset;
-
-        /// <summary>
         /// SpriteRenderer component
         /// </summary>
         protected SpriteRenderer SpriteRenderer;
@@ -65,19 +60,6 @@ namespace Assets.Scripts.Entities
         }
 
         /// <summary>
-        /// Sets velocity according to the basic movement AI found in <see cref="SetVelocity"/> if <see cref="IsReady"/> is true.
-        /// </summary>
-        protected override void Update()
-        {
-            if (IsReady)
-            {
-                SetVelocity();
-            }
-
-            base.Update();
-        }
-
-        /// <summary>
         /// Applies the set velocity if <see cref="IsReady"/> is true.
         /// </summary>
         protected override void FixedUpdate()
@@ -95,15 +77,9 @@ namespace Assets.Scripts.Entities
             var shot = collision.collider.GetComponent<Shot>();
             if (shot == null)
             {
-                var direction = collision.collider.bounds.center - collision.otherCollider.bounds.center;
-                if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
-                {
-                    Velocity.x = -Velocity.x;
-                }
-                else
-                {
-                    Velocity.y = -Velocity.y;
-                }
+                var normal = collision.contacts[0].normal;
+
+                Velocity += -2.0f * Vector2.Dot(Velocity, normal) * normal;
             }
 
             base.OnCollisionEnter2D(collision);
@@ -130,26 +106,6 @@ namespace Assets.Scripts.Entities
             IsReady = true;
 
             yield return null;
-        }
-
-        /// <summary>
-        /// Sets the velocity according to basic movement AI.
-        /// </summary>
-        protected virtual void SetVelocity()
-        {
-            var position = Camera.main.WorldToViewportPoint(transform.position);
-
-            if ((position.x <= ScreenBoundOffset && Velocity.x < 0.0f) ||
-                (position.x >= 1.0f - ScreenBoundOffset && Velocity.x > 0.0f))
-            {
-                Velocity.x = -Velocity.x;
-            }
-
-            if ((position.y <= ScreenBoundOffset && Velocity.y < 0.0f) ||
-                (position.y >= 1.0f - ScreenBoundOffset && Velocity.y > 0.0f))
-            {
-                Velocity.y = -Velocity.y;
-            }
         }
 
         #endregion

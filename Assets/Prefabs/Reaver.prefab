@@ -73,7 +73,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -184,7 +184,6 @@ MonoBehaviour:
   MoveSpeed: 0.6
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
   BlinkSprite: {fileID: 21300002, guid: 3e5b9e216e4d98c49a1b704b36ece45b, type: 3}
-  ScreenBoundOffset: 0.1
   LeftSprite: {fileID: 21300004, guid: 3e5b9e216e4d98c49a1b704b36ece45b, type: 3}
   RightSprite: {fileID: 21300006, guid: 3e5b9e216e4d98c49a1b704b36ece45b, type: 3}
 --- !u!212 &212411269860364134
