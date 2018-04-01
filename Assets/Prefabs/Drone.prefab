@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 61326648799937388}
   - component: {fileID: 82921640615033312}
   - component: {fileID: 114821555273210760}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Drone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
