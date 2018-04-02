@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -56,6 +57,9 @@ namespace Assets.Scripts.Entities
             _audioSource = GetComponent<AudioSource>();
 
             base.Start();
+
+            // TODO: Move to a more approprite script
+            Screen.SetResolution(Camera.main.pixelHeight, Camera.main.pixelHeight, false);
         }
 
         protected override void Update()
