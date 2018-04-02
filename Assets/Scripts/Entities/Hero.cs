@@ -59,8 +59,7 @@ namespace Assets.Scripts.Entities
             base.Start();
 
             // TODO: Move to a more approprite script
-            Camera.main.pixelRect = new Rect((Camera.main.pixelWidth - Camera.main.pixelHeight) / 2, 0,
-                Camera.main.pixelHeight, Camera.main.pixelHeight);
+            Screen.SetResolution(Camera.main.pixelHeight, Camera.main.pixelHeight, false);
         }
 
         protected override void Update()
