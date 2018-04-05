@@ -8,8 +8,14 @@ namespace Assets.Scripts
     /// </summary>
     public abstract class Script : MonoBehaviour, IDisposable
     {
-        // Only adding the messages I plan on using
         #region MonoBehaviour Messages
+
+        /// <summary>
+        /// Awake is called when the script instance is being loaded.
+        /// </summary>
+        protected virtual void Awake()
+        {
+        }
 
         /// <summary>
         /// Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.
@@ -43,6 +49,20 @@ namespace Assets.Scripts
         /// This function is called when the MonoBehaviour will be destroyed.
         /// </summary>
         protected virtual void OnDestroy()
+        {
+        }
+
+        /// <summary>
+        /// This function is called when the behaviour becomes disabled () or inactive.
+        /// </summary>
+        protected virtual void OnDisable()
+        {
+        }
+
+        /// <summary>
+        /// This function is called when the object becomes enabled and active.
+        /// </summary>
+        protected virtual void OnEnable()
         {
         }
 

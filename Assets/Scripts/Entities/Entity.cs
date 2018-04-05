@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities
@@ -30,6 +31,26 @@ namespace Assets.Scripts.Entities
         protected AudioSource AudioSource;
 
         /// <summary>
+        /// Renderer component
+        /// </summary>
+        protected Renderer Renderer;
+
+        /// <summary>
+        /// Collider2D component
+        /// </summary>
+        protected Collider2D Collider2D;
+
+        /// <summary>
+        /// Initial position in room
+        /// </summary>
+        protected Vector3? InitialPosition;
+
+        /// <summary>
+        /// Ready to move and attack
+        /// </summary>
+        protected bool IsReady;
+
+        /// <summary>
         /// Current health total
         /// </summary>
         [NonSerialized]
@@ -40,13 +61,15 @@ namespace Assets.Scripts.Entities
         #region Script Overrides
 
         /// <summary>
-        /// Set health to max on start
+        /// Set health to max on startup
         /// </summary>
-        protected override void Start()
+        protected override void Awake()
         {
-            Health = MaxHealth;
             AudioSource = GetComponent<AudioSource>();
-            base.Start();
+            Renderer = GetComponent<Renderer>();
+            Collider2D = GetComponent<Collider2D>();
+
+            base.Awake();
         }
 
         /// <summary>
@@ -54,14 +77,17 @@ namespace Assets.Scripts.Entities
         /// </summary>
         protected override void Update()
         {
-            if (Health <= 0) Dispose();
+            if (Health <= 0)
+            {
+                StartCoroutine(Die());
+            }
+
             base.Update();
         }
 
         /// <summary>
         /// React to being hit
         /// </summary>
-        /// <param name="collision"></param>
         protected override void OnCollisionEnter2D(Collision2D collision)
         {
             var shot = collision.collider.GetComponent<Shot>();
@@ -75,26 +101,52 @@ namespace Assets.Scripts.Entities
         }
 
         /// <summary>
-        /// Play death sound and delay disposal until its done
+        /// Enable components and reset health on enable
         /// </summary>
-        protected override void Dispose(bool disposing, float delay = 0)
+        protected override void OnEnable()
         {
-            if (IsDisposed) return;
-
-            if (DeathClip != null)
+            if (InitialPosition == null)
             {
-                AudioSource.PlayOneShot(DeathClip);
-                delay = DeathClip.length;
-                var render = GetComponent<Renderer>();
-                render.enabled = false;
-                var collider2d = GetComponent<Collider2D>();
-                collider2d.enabled = false;
-                enabled = false;
+                InitialPosition = transform.localPosition;
             }
 
-            base.Dispose(disposing, delay);
+            Renderer.enabled = true;
+            Collider2D.enabled = true;
+            Health = MaxHealth;
+
+            base.OnEnable();
+        }
+
+        /// <summary>
+        /// Play death sound on disable
+        /// </summary>
+        protected override void OnDisable()
+        {
+            if (InitialPosition != null)
+            {
+                transform.localPosition = InitialPosition.Value;
+            }
+
+            base.OnDisable();
         }
 
         #endregion
+
+        /// <summary>
+        /// Death coroutine
+        /// </summary>
+        protected IEnumerator Die()
+        {
+            if (DeathClip != null)
+            {
+                AudioSource.PlayOneShot(DeathClip);
+                Renderer.enabled = false;
+                Collider2D.enabled = false;
+
+                yield return new WaitForSeconds(DeathClip.length);
+            }
+
+            gameObject.SetActive(false);
+        }
     }
 }
