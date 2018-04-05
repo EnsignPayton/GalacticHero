@@ -49,13 +49,19 @@ namespace Assets.Scripts.Entities
 
         #region Script Overrides
 
-        protected override void Start()
+        protected override void Awake()
         {
             _collider = GetComponent<Collider2D>();
             _rigidbody = GetComponent<Rigidbody2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _audioSource = GetComponent<AudioSource>();
+            IsReady = true;
 
+            base.Awake();
+        }
+
+        protected override void Start()
+        {
             base.Start();
 
             // TODO: Move to a more approprite script
@@ -64,22 +70,26 @@ namespace Assets.Scripts.Entities
 
         protected override void Update()
         {
-            Shoot();
+            if (IsReady)
+                Shoot();
 
             base.Update();
         }
 
         protected override void FixedUpdate()
         {
-            var velocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
-            _rigidbody.position += velocity * MoveSpeed * Time.deltaTime;
-
-            if (velocity != Vector2.zero && _flameReady)
+            if (IsReady)
             {
-                var flame = Instantiate(FlamePrefab);
-                flame.transform.position = transform.position;
-                StartCoroutine(FlameDelay());
+                var velocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+                _rigidbody.position += velocity * MoveSpeed * Time.deltaTime;
+
+                if (velocity != Vector2.zero && _flameReady)
+                {
+                    var flame = Instantiate(FlamePrefab);
+                    flame.transform.position = transform.position;
+                    StartCoroutine(FlameDelay());
+                }
             }
 
             base.FixedUpdate();
@@ -159,17 +169,36 @@ namespace Assets.Scripts.Entities
 
         private IEnumerator RoomTransition(Room oldRoom, Room newRoom)
         {
+            IsReady = false;
+
             oldRoom.SetActive(false);
             transform.parent = newRoom.transform;
 
-            var cameraPosition = Camera.main.transform.position;
-            cameraPosition.x = newRoom.transform.position.x;
-            cameraPosition.y = newRoom.transform.position.y;
-            Camera.main.transform.position = cameraPosition;
+            var initialPosition = Camera.main.transform.position;
 
-            yield return new WaitForFixedUpdate();
+            var finalPosition = Camera.main.transform.position;
+            finalPosition.x = newRoom.transform.position.x;
+            finalPosition.y = newRoom.transform.position.y;
 
+            var difference = finalPosition - initialPosition;
+
+            for (int i = 1; i <= 45; i++)
+            {
+                var tempPosition = initialPosition + (difference * i / 45.0f);
+                Camera.main.transform.position = tempPosition;
+
+                yield return new WaitForEndOfFrame();
+            }
+
+            Camera.main.transform.position = finalPosition;
             newRoom.SetActive(true);
+
+            var localPosition = transform.localPosition;
+            localPosition.x = Mathf.Clamp(localPosition.x, -newRoom.Size, newRoom.Size);
+            localPosition.y = Mathf.Clamp(localPosition.y, -newRoom.Size, newRoom.Size);
+            transform.localPosition = localPosition;
+
+            IsReady = true;
         }
 
         #endregion

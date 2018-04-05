@@ -39,7 +39,15 @@ namespace Assets.Scripts.Entities
         /// </summary>
         protected Collider2D Collider2D;
 
+        /// <summary>
+        /// Initial position in room
+        /// </summary>
         protected Vector3? InitialPosition;
+
+        /// <summary>
+        /// Ready to move and attack
+        /// </summary>
+        protected bool IsReady;
 
         /// <summary>
         /// Current health total

@@ -25,11 +25,6 @@ namespace Assets.Scripts.Entities
         protected Sprite NormalSprite;
 
         /// <summary>
-        /// Ready to move and attack
-        /// </summary>
-        protected bool IsReady;
-
-        /// <summary>
         /// Velocity used for movement AI
         /// </summary>
         protected Vector2 Velocity;

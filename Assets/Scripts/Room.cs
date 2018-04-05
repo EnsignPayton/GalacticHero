@@ -7,6 +7,11 @@ namespace Assets.Scripts
     public class Room : Script
     {
         /// <summary>
+        /// Max vertical or horizontal distance from center
+        /// </summary>
+        public float Size = 1.0f;
+
+        /// <summary>
         /// Sets all child objects except Hero active or inactive
         /// </summary>
         /// <param name="isActive">Active toggle</param>
