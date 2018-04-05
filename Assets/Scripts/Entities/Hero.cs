@@ -96,6 +96,21 @@ namespace Assets.Scripts.Entities
             base.OnCollisionEnter2D(collision);
         }
 
+        protected override void OnTriggerEnter2D(Collider2D triggerCollider)
+        {
+            var room = triggerCollider.GetComponent<Room>();
+            var oldRoom = transform.parent.GetComponent<Room>();
+
+            if (room != null && oldRoom != null && room != oldRoom)
+            {
+                Debug.Log("Now Entering " + room.name);
+
+                StartCoroutine(RoomTransition(oldRoom, room));
+            }
+
+            base.OnTriggerEnter2D(triggerCollider);
+        }
+
         #endregion
 
         #region Methods
@@ -140,6 +155,21 @@ namespace Assets.Scripts.Entities
             _flameReady = true;
 
             yield return null;
+        }
+
+        private IEnumerator RoomTransition(Room oldRoom, Room newRoom)
+        {
+            oldRoom.SetActive(false);
+            transform.parent = newRoom.transform;
+
+            var cameraPosition = Camera.main.transform.position;
+            cameraPosition.x = newRoom.transform.position.x;
+            cameraPosition.y = newRoom.transform.position.y;
+            Camera.main.transform.position = cameraPosition;
+
+            yield return new WaitForFixedUpdate();
+
+            newRoom.SetActive(true);
         }
 
         #endregion

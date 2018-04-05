@@ -43,18 +43,21 @@ namespace Assets.Scripts.Entities
 
         #region Script Overrides
 
-        /// <summary>
-        /// Initialize components and choose a random starting velocity.
-        /// </summary>
-        protected override void Start()
+        protected override void Awake()
         {
             Rigidbody = GetComponent<Rigidbody2D>();
             SpriteRenderer = GetComponent<SpriteRenderer>();
             NormalSprite = SpriteRenderer.sprite;
+
+            base.Awake();
+        }
+
+        protected override void OnEnable()
+        {
             IsReady = false;
             Velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized * MoveSpeed;
 
-            base.Start();
+            base.OnEnable();
 
             StartCoroutine(BlinkCoroutine());
         }
