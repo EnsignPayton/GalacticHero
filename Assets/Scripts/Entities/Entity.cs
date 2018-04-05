@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities
@@ -77,7 +78,9 @@ namespace Assets.Scripts.Entities
         protected override void Update()
         {
             if (Health <= 0)
-                enabled = false;
+            {
+                StartCoroutine(Die());
+            }
 
             base.Update();
         }
@@ -119,13 +122,6 @@ namespace Assets.Scripts.Entities
         /// </summary>
         protected override void OnDisable()
         {
-            if (DeathClip != null && AudioSource.isActiveAndEnabled)
-            {
-                AudioSource.PlayOneShot(DeathClip);
-                Renderer.enabled = false;
-                Collider2D.enabled = false;
-            }
-
             if (InitialPosition != null)
             {
                 transform.localPosition = InitialPosition.Value;
@@ -135,5 +131,22 @@ namespace Assets.Scripts.Entities
         }
 
         #endregion
+
+        /// <summary>
+        /// Death coroutine
+        /// </summary>
+        protected IEnumerator Die()
+        {
+            if (DeathClip != null)
+            {
+                AudioSource.PlayOneShot(DeathClip);
+                Renderer.enabled = false;
+                Collider2D.enabled = false;
+
+                yield return new WaitForSeconds(DeathClip.length);
+            }
+
+            gameObject.SetActive(false);
+        }
     }
 }
