@@ -4,7 +4,7 @@ Galactic Hero is an arcade-inspired 2D action shooter based on Daniel Remar's [H
 
 ## Running
 
-This project is written for the free version of Unity 2017.3.1f1. You'll need Unity installed of that version or higher. With Unity installed, just open [Main](Assets/_Scenes/Main.unity) and you should be good to go.
+This project is written for the free version of Unity 2017.3.1f1. You'll need Unity installed of that version or higher. With Unity installed, just open [Level 1](Assets/_Scenes/Level1.unity) and you should be good to go.
 
 ## Script Design
 
