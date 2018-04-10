@@ -6,7 +6,7 @@ namespace Assets.Scripts.Entities
 {
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(AudioSource))]
-    public abstract class Entity : Script
+    public class Entity : Script
     {
         #region Fields
 
