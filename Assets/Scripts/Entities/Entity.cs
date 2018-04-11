@@ -135,7 +135,7 @@ namespace Assets.Scripts.Entities
         /// <summary>
         /// Death coroutine
         /// </summary>
-        protected IEnumerator Die()
+        protected virtual IEnumerator Die()
         {
             if (DeathClip != null)
             {

@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 212900481691534786}
   - component: {fileID: 61416136544519138}
   - component: {fileID: 82073065895914904}
-  - component: {fileID: 114247940407708324}
+  - component: {fileID: 114627482180753994}
   m_Layer: 0
   m_Name: Core
   m_TagString: Untagged
@@ -426,7 +426,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 7
 --- !u!60 &60850677793313238
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -1711,7 +1711,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3710de6c60fb814c9d0bbfd0964e75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 2
+  MaxHealth: 4
   MoveSpeed: 0
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
 --- !u!114 &114228123665062924
@@ -1725,7 +1725,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3710de6c60fb814c9d0bbfd0964e75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 2
+  MaxHealth: 4
   MoveSpeed: 0
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
 --- !u!114 &114246539613025370
@@ -1734,20 +1734,6 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1167236292335914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3710de6c60fb814c9d0bbfd0964e75f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxHealth: 2
-  MoveSpeed: 0
-  DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
---- !u!114 &114247940407708324
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1380257753870896}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3710de6c60fb814c9d0bbfd0964e75f, type: 3}
@@ -1767,7 +1753,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3710de6c60fb814c9d0bbfd0964e75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 2
+  MaxHealth: 4
   MoveSpeed: 0
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
 --- !u!114 &114321215772417206
@@ -1792,7 +1778,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3710de6c60fb814c9d0bbfd0964e75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 2
+  MaxHealth: 4
   MoveSpeed: 0
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
 --- !u!114 &114482362453804862
@@ -1806,7 +1792,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3710de6c60fb814c9d0bbfd0964e75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 2
+  MaxHealth: 4
+  MoveSpeed: 0
+  DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
+--- !u!114 &114627482180753994
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1380257753870896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1d8331325faed840990524dc771c717, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 32
   MoveSpeed: 0
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
 --- !u!114 &114642781923460320
@@ -1820,7 +1820,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3710de6c60fb814c9d0bbfd0964e75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 2
+  MaxHealth: 4
   MoveSpeed: 0
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
 --- !u!114 &114698354482598084
@@ -1834,7 +1834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3710de6c60fb814c9d0bbfd0964e75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 2
+  MaxHealth: 4
   MoveSpeed: 0
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
 --- !u!114 &114736646677889940
@@ -1848,7 +1848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3710de6c60fb814c9d0bbfd0964e75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 2
+  MaxHealth: 4
   MoveSpeed: 0
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
 --- !u!114 &114843358561676490
@@ -1862,7 +1862,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3710de6c60fb814c9d0bbfd0964e75f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 2
+  MaxHealth: 4
   MoveSpeed: 0
   DeathClip: {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
 --- !u!212 &212041527861682380

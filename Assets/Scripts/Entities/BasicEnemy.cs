@@ -58,7 +58,7 @@ namespace Assets.Scripts.Entities
         }
 
         /// <summary>
-        /// Applies the set velocity if <see cref="IsReady"/> is true.
+        /// Applies the set velocity if <see cref="Entity.IsReady"/> is true.
         /// </summary>
         protected override void FixedUpdate()
         {
