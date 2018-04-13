@@ -453,19 +453,21 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: -0.32, y: -0.06}
-      - {x: -0.32, y: -0.11}
-      - {x: -0.31, y: -0.14}
-      - {x: -0.28, y: -0.16}
-      - {x: 0.29, y: -0.16}
-      - {x: 0.32, y: -0.13}
+      - {x: -0.32, y: -0.08}
+      - {x: -0.3, y: -0.12}
+      - {x: -0.22, y: -0.16}
+      - {x: 0.22, y: -0.16}
+      - {x: 0.3, y: -0.12}
+      - {x: 0.32, y: -0.08}
       - {x: 0.32, y: -0.06}
-    - - {x: 0.31, y: 0.14}
-      - {x: 0.26, y: 0.16}
-      - {x: -0.25, y: 0.16}
-      - {x: -0.32, y: 0.13}
+    - - {x: 0.3, y: 0.12}
+      - {x: 0.22, y: 0.16}
+      - {x: -0.22, y: 0.16}
+      - {x: -0.3, y: 0.12}
+      - {x: -0.32, y: 0.08}
       - {x: -0.32, y: 0.06}
       - {x: 0.32, y: 0.06}
-      - {x: 0.32, y: 0.11}
+      - {x: 0.32, y: 0.08}
 --- !u!61 &61079490099929608
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -1710,7 +1712,7 @@ Animator:
   m_GameObject: {fileID: 1380257753870896}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8f8e80b6acc0b214491a26ca2ae1aec8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1785,6 +1787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abed1419a7ca33f4999d24be0bbc4bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShotPrefab: {fileID: 1942292983929450, guid: b81bc0e951bf6f94792f2f8ce41b8d27, type: 2}
 --- !u!114 &114373222631218516
 MonoBehaviour:
   m_ObjectHideFlags: 1
