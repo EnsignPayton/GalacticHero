@@ -38,8 +38,6 @@ namespace Assets.Scripts
                 newShot.transform.position = collision.transform.position;
 
                 bool isUp = collision.transform.position.y > transform.position.y;
-
-                Debug.Log(isUp);
                 newShot.Direction = isUp ? new Vector2(0, 1) : new Vector2(0, -1);
             }
 

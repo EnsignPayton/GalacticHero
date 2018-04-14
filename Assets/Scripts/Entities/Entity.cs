@@ -56,6 +56,8 @@ namespace Assets.Scripts.Entities
         [NonSerialized]
         public int Health;
 
+        private bool _isDying;
+
         #endregion
 
         #region Script Overrides
@@ -77,8 +79,9 @@ namespace Assets.Scripts.Entities
         /// </summary>
         protected override void Update()
         {
-            if (Health <= 0)
+            if (Health <= 0 && !_isDying)
             {
+                _isDying = true;
                 StartCoroutine(Die());
             }
 
