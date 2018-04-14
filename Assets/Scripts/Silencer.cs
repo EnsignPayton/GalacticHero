@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Assets.Scripts.Entities;
+﻿using Assets.Scripts.Entities;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -42,21 +41,6 @@ namespace Assets.Scripts
             }
 
             base.OnCollisionEnter2D(collision);
-        }
-
-        private IEnumerator PeriodicMovement()
-        {
-            // Or while enabled, while alive, etc.
-            while (true)
-            {
-                // Move in first arc
-
-                // Move in second arc
-
-                // Move in third arc
-
-                // Stop, thn repeat
-            }
         }
     }
 }
