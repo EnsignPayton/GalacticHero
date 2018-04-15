@@ -96,8 +96,7 @@ namespace Assets.Scripts.Entities
             var shot = collision.collider.GetComponent<Shot>();
             if (shot != null && shot.Source != null && shot.Source != this)
             {
-                Health--;
-                shot.Dispose();
+                ReactToHit(shot, collision);
             }
 
             base.OnCollisionEnter2D(collision);
@@ -135,6 +134,8 @@ namespace Assets.Scripts.Entities
 
         #endregion
 
+        #region Virtual Methods
+
         /// <summary>
         /// Death coroutine
         /// </summary>
@@ -151,5 +152,13 @@ namespace Assets.Scripts.Entities
 
             gameObject.SetActive(false);
         }
+
+        protected virtual void ReactToHit(Shot shot, Collision2D collision)
+        {
+            Health--;
+            shot.Dispose();
+        }
+
+        #endregion
     }
 }

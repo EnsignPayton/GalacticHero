@@ -72,6 +72,7 @@ namespace Assets.Scripts.Entities
 
         protected override void OnCollisionEnter2D(Collision2D collision)
         {
+            // Bounce off things that are not a shot
             var shot = collision.collider.GetComponent<Shot>();
             if (shot == null)
             {
