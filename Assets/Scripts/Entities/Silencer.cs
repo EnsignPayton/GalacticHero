@@ -1,20 +1,29 @@
 ﻿using System.Collections;
-using Assets.Scripts.Entities;
 using Assets.Scripts.Utilities;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Entities
 {
     public class Silencer : BasicEnemy
     {
+        #region Fields
+
         /// <summary>
-        /// Shot object prafab
+        /// Shot object prefab
         /// </summary>
         public GameObject ShotPrefab;
 
+        /// <summary>
+        /// Enemy spawn prefabs
+        /// </summary>
+        public GameObject[] EnemyPrefabs;
+
         private Vector3 _sourcePosition;
         private bool _collidedFlag;
+
+        #endregion
+
+        #region Overrides
 
         protected override void Awake()
         {
@@ -28,59 +37,37 @@ namespace Assets.Scripts
             // Don't use blink sprite
             //return base.BlinkCoroutine();
 
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(2.0f);
 
             IsReady = true;
 
-            // TODO: Run AI loop
-            Debug.Log("AI Logic Goes Here");
-        }
-
-        private IEnumerator InitializeCoroutine()
-        {
-            yield return new WaitForSeconds(1.0f);
-
             while (true)
             {
-                // 1. Pick a direction
-                Velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized * MoveSpeed;
+                // 1. Pick a random direction
+                SetRandomVelocity();
 
-                // 2. With a short delay, spawn enemies
-                yield return new WaitForSeconds(0.25f);
-                //Debug.Log("Enemy 1 Spawned");
-                yield return new WaitForSeconds(0.25f);
-                //Debug.Log("Enemy 2 Spawned");
+                // 2. After short delays, spawn two enemies
+                yield return new WaitForSeconds(0.5f);
+                SpawnRandomEnemy();
+                yield return new WaitForSeconds(0.5f);
+                SpawnRandomEnemy();
 
-                // 3. Wait for wall collision
-                while (!_collidedFlag)
+                // 3. Wait for a few bounces
+                yield return new WaitForSeconds(5.0f);
+
+                // 4. Move toward center
+                while ((_sourcePosition - transform.position).magnitude > 0.4f)
                 {
-                    yield return null;
+                    SetVelocity(_sourcePosition - transform.position);
+                    yield return new WaitForFixedUpdate();
                 }
 
-                _collidedFlag = false;
-
-                // 4. With a short delay, shoot
-                yield return new WaitForSeconds(0.25f);
-                //Debug.Log("Shot 1 Spawned");
-                yield return new WaitForSeconds(0.25f);
-                //Debug.Log("Shot 2 Spawned");
-
-                // 5. Wait for another wall collision
-                while (!_collidedFlag)
-                {
-                    yield return null;
-                }
-
-                _collidedFlag = false;
-
-                // 6. Go toward middle
-                Velocity = (transform.position - _sourcePosition).normalized * MoveSpeed;
-                yield return new WaitForSeconds(1.0f);
-
-                // 7. Stop and shoot
+                // 5. Stop and shoot in diagonals
                 Velocity = Vector2.zero;
-                Debug.Log("Quad Shot Fired!");
+                // TODO: Create Shots
                 yield return new WaitForSeconds(4.0f);
+
+                Debug.Log("Loop Finished");
             }
         }
 
@@ -100,6 +87,29 @@ namespace Assets.Scripts
             // Don't take damage
             Health++;
             base.ReactToHit(shot, collision);
+        }
+
+        #endregion
+
+        private void SpawnRandomEnemy()
+        {
+            var enemyPrefab = Instantiate(EnemyPrefabs.RandomElement());
+            var enemyCollider = enemyPrefab.GetComponent<Collider2D>();
+            Physics2D.IgnoreCollision(enemyCollider, Collider2D);
+
+            foreach (Transform child in transform)
+            {
+                var childCollider = child.GetComponent<Collider2D>();
+
+                if (childCollider != null)
+                {
+                    Physics2D.IgnoreCollision(enemyCollider, childCollider);
+                }
+            }
+
+            enemyPrefab.transform.position = transform.position;
+
+            Debug.Log($"Spawned Enemy {enemyPrefab.gameObject.name}");
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Assets.Scripts.Entities
         protected override void OnEnable()
         {
             IsReady = false;
-            Velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized * MoveSpeed;
+            SetRandomVelocity();
 
             base.OnEnable();
 
@@ -86,7 +86,7 @@ namespace Assets.Scripts.Entities
 
         #endregion
 
-        #region Virtual Methods
+        #region Protected Methods
 
         /// <summary>
         /// On Start, pauses and blinks before taking action.
@@ -105,6 +105,21 @@ namespace Assets.Scripts.Entities
             IsReady = true;
 
             yield return null;
+        }
+
+        protected void SetVelocity(Vector2 velocity)
+        {
+            Velocity = velocity.normalized * MoveSpeed;
+        }
+
+        protected void SetVelocity(float xSpeed, float ySpeed)
+        {
+            SetVelocity(new Vector2(xSpeed, ySpeed));
+        }
+
+        protected void SetRandomVelocity()
+        {
+            SetVelocity(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
         }
 
         #endregion
