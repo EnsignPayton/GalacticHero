@@ -64,7 +64,10 @@ namespace Assets.Scripts.Entities
 
                 // 5. Stop and shoot in diagonals
                 Velocity = Vector2.zero;
-                // TODO: Create Shots
+                Shoot(transform.position + new Vector3(-0.2f, -0.2f), new Vector2(-1, -1).normalized, true);
+                Shoot(transform.position + new Vector3(-0.2f, 0.2f), new Vector2(-1, 1).normalized, true);
+                Shoot(transform.position + new Vector3(0.2f, -0.2f), new Vector2(1, -1).normalized, true);
+                Shoot(transform.position + new Vector3(0.2f, 0.2f), new Vector2(1, 1).normalized, true);
                 yield return new WaitForSeconds(4.0f);
 
                 Debug.Log("Loop Finished");
@@ -73,16 +76,8 @@ namespace Assets.Scripts.Entities
 
         protected override void ReactToHit(Shot shot, Collision2D collision)
         {
-            var reflectPrefab = Instantiate(ShotPrefab);
-            var reflectCollider = reflectPrefab.GetComponent<Collider2D>();
-            Physics2D.IgnoreCollision(reflectCollider, Collider2D);
-
-            var reflectShot = reflectPrefab.GetComponent<Shot>();
-            reflectShot.Source = this;
-            reflectShot.transform.position = collision.transform.position;
-
             bool isUp = collision.transform.position.y > transform.position.y;
-            reflectShot.Direction = isUp ? new Vector2(0, 1) : new Vector2(0, -1);
+            Shoot(collision.transform.position, new Vector2(0, isUp ? 1 : -1));
 
             // Don't take damage
             Health++;
@@ -94,22 +89,34 @@ namespace Assets.Scripts.Entities
         private void SpawnRandomEnemy()
         {
             var enemyPrefab = Instantiate(EnemyPrefabs.RandomElement());
-            var enemyCollider = enemyPrefab.GetComponent<Collider2D>();
-            Physics2D.IgnoreCollision(enemyCollider, Collider2D);
+            enemyPrefab.transform.position = transform.position;
+        }
 
-            foreach (Transform child in transform)
+        private void Shoot(Vector3? position = null, Vector2? direction = null, bool ignoreCollision = false)
+        {
+            var shotPrefab = Instantiate(ShotPrefab);
+            var shot = shotPrefab.GetComponent<Shot>();
+            shot.Source = this;
+            shot.transform.position = position ?? transform.position;
+            shot.Direction = direction ?? Vector2.zero;
+            shot.Speed = 0.8f;
+
+            if (ignoreCollision)
             {
-                var childCollider = child.GetComponent<Collider2D>();
+                var shotCollider = shotPrefab.GetComponent<Collider2D>();
+                Physics2D.IgnoreCollision(shotCollider, Collider2D);
 
-                if (childCollider != null)
+                foreach (Transform child in transform)
                 {
-                    Physics2D.IgnoreCollision(enemyCollider, childCollider);
+                    var childCollider = child.GetComponent<Collider2D>();
+                    if (childCollider != null)
+                    {
+                        Physics2D.IgnoreCollision(shotCollider, childCollider);
+                    }
                 }
             }
 
-            enemyPrefab.transform.position = transform.position;
-
-            Debug.Log($"Spawned Enemy {enemyPrefab.gameObject.name}");
+            Debug.Log("Shot!");
         }
     }
 }
