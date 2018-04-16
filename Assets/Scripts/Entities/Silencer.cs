@@ -69,10 +69,10 @@ namespace Assets.Scripts.Entities
 
                 // 5. Stop and shoot in diagonals
                 Velocity = Vector2.zero;
-                Shoot(transform.position + new Vector3(-0.2f, -0.2f), new Vector2(-1, -1).normalized, 0.8f, true);
-                Shoot(transform.position + new Vector3(-0.2f, 0.2f), new Vector2(-1, 1).normalized, 0.8f, true);
-                Shoot(transform.position + new Vector3(0.2f, -0.2f), new Vector2(1, -1).normalized, 0.8f, true);
-                Shoot(transform.position + new Vector3(0.2f, 0.2f), new Vector2(1, 1).normalized, 0.8f, true);
+                Shoot(transform.position + new Vector3(-0.16f, -0.16f), new Vector2(-1, -1).normalized, 0.8f, true);
+                Shoot(transform.position + new Vector3(-0.16f, 0.16f), new Vector2(-1, 1).normalized, 0.8f, true);
+                Shoot(transform.position + new Vector3(0.16f, -0.16f), new Vector2(1, -1).normalized, 0.8f, true);
+                Shoot(transform.position + new Vector3(0.16f, 0.16f), new Vector2(1, 1).normalized, 0.8f, true);
                 yield return new WaitForSeconds(4.0f);
             }
         }
@@ -90,6 +90,8 @@ namespace Assets.Scripts.Entities
 
         #endregion
 
+        #region Private Methods
+
         private void SpawnRandomEnemy()
         {
             var enemyPrefab = Instantiate(EnemyPrefabs.RandomElement());
@@ -102,6 +104,7 @@ namespace Assets.Scripts.Entities
             var shotPrefab = Instantiate(ShotPrefab);
             var shot = shotPrefab.GetComponent<Shot>();
             shot.Source = this;
+            shot.transform.parent = transform;
             shot.transform.position = position ?? transform.position;
             shot.Direction = direction ?? Vector2.zero;
             shot.Speed = speed;
@@ -121,5 +124,7 @@ namespace Assets.Scripts.Entities
                 }
             }
         }
+
+        #endregion
     }
 }
