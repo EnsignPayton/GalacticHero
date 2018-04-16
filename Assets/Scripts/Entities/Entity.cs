@@ -81,8 +81,7 @@ namespace Assets.Scripts.Entities
         {
             if (Health <= 0 && !_isDying)
             {
-                _isDying = true;
-                StartCoroutine(Die());
+                Kill();
             }
 
             base.Update();
@@ -160,5 +159,11 @@ namespace Assets.Scripts.Entities
         }
 
         #endregion
+
+        public void Kill()
+        {
+            _isDying = true;
+            StartCoroutine(Die());
+        }
     }
 }

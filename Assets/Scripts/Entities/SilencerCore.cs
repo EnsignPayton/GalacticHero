@@ -5,6 +5,15 @@ namespace Assets.Scripts.Entities
 {
     public class SilencerCore : Entity
     {
+        private Silencer _silencer;
+
+        protected override void Awake()
+        {
+            _silencer = transform.parent.GetComponent<Silencer>();
+
+            base.Awake();
+        }
+
         protected override IEnumerator Die()
         {
             if (DeathClip != null)
@@ -16,7 +25,7 @@ namespace Assets.Scripts.Entities
                 yield return new WaitForSeconds(DeathClip.length);
             }
 
-            transform.parent.gameObject.SetActive(false);
+            _silencer.Kill();
         }
     }
 }

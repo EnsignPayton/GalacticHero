@@ -46,7 +46,7 @@ namespace Assets.Scripts.Entities
 
             IsReady = true;
 
-            while (true)
+            while (IsReady)
             {
                 // 1. Pick a random direction
                 SetRandomVelocity();
@@ -75,6 +75,25 @@ namespace Assets.Scripts.Entities
                 Shoot(transform.position + new Vector3(0.16f, 0.16f), new Vector2(1, 1).normalized, 0.8f, true);
                 yield return new WaitForSeconds(4.0f);
             }
+        }
+
+        protected override IEnumerator Die()
+        {
+            // Stop interaction
+            IsReady = false;
+            StopCoroutine(BlinkCoroutine());
+
+            // Ignore hero
+            var hero = FindObjectOfType<Hero>();
+            var heroCollider = hero.GetComponent<Collider2D>();
+            IgnoreAllColliders(heroCollider);
+
+            // Sink to floor
+            Rigidbody.AddForce(new Vector2(0, -24));
+
+            yield return new WaitForSeconds(4.0f);
+
+            gameObject.SetActive(false);
         }
 
         protected override void ReactToHit(Shot shot, Collision2D collision)
@@ -112,15 +131,20 @@ namespace Assets.Scripts.Entities
             if (ignoreCollision)
             {
                 var shotCollider = shotPrefab.GetComponent<Collider2D>();
-                Physics2D.IgnoreCollision(shotCollider, Collider2D);
+                IgnoreAllColliders(shotCollider);
+            }
+        }
 
-                foreach (Transform child in transform)
+        private void IgnoreAllColliders(Collider2D otherCollider)
+        {
+            Physics2D.IgnoreCollision(otherCollider, Collider2D);
+
+            foreach (Transform child in transform)
+            {
+                var childCollider = child.GetComponent<Collider2D>();
+                if (childCollider != null)
                 {
-                    var childCollider = child.GetComponent<Collider2D>();
-                    if (childCollider != null)
-                    {
-                        Physics2D.IgnoreCollision(shotCollider, childCollider);
-                    }
+                    Physics2D.IgnoreCollision(otherCollider, childCollider);
                 }
             }
         }
