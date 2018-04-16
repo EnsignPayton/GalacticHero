@@ -1795,7 +1795,13 @@ MonoBehaviour:
   EnemyPrefabs:
   - {fileID: 1014705843072622, guid: 9d387cec7ff70b24e9b9f9e82309d9cd, type: 2}
   - {fileID: 1710552858296218, guid: 43e81ffa4c7468d4080df94dd040e377, type: 2}
+  BigExplosionPrefab: {fileID: 1982835033964690, guid: e8f4de915766c204bbbf32eec6c23277,
+    type: 2}
   PingClip: {fileID: 8300000, guid: a089a2ba49e3b814cb7ed62a167f67e1, type: 3}
+  ExplosionClips:
+  - {fileID: 8300000, guid: 96db12176ef532b4e90ed58ef93946b4, type: 3}
+  - {fileID: 8300000, guid: 49a85fcd62f04824d965da4e0ba642f8, type: 3}
+  - {fileID: 8300000, guid: 0f3db229814a885448956234d8d27f17, type: 3}
 --- !u!114 &114373222631218516
 MonoBehaviour:
   m_ObjectHideFlags: 1

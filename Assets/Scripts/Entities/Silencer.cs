@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Utilities;
 using UnityEngine;
 
@@ -19,9 +20,19 @@ namespace Assets.Scripts.Entities
         public GameObject[] EnemyPrefabs;
 
         /// <summary>
+        /// Big Explosion prefab
+        /// </summary>
+        public GameObject BigExplosionPrefab;
+
+        /// <summary>
         /// Shot bounce off sound clip
         /// </summary>
         public AudioClip PingClip;
+
+        /// <summary>
+        /// Explosion sound clips. Should always contain 3 clips.
+        /// </summary>
+        public AudioClip[] ExplosionClips;
 
         private Vector3 _sourcePosition;
         private bool _collidedFlag;
@@ -81,7 +92,13 @@ namespace Assets.Scripts.Entities
         {
             // Stop interaction
             IsReady = false;
-            StopCoroutine(BlinkCoroutine());
+            StopCoroutine(Blink);
+
+            // Disable children
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(false);
+            }
 
             // Ignore hero
             var hero = FindObjectOfType<Hero>();
@@ -89,12 +106,69 @@ namespace Assets.Scripts.Entities
             IgnoreAllColliders(heroCollider);
 
             // Sink to floor
-            Rigidbody.AddForce(new Vector2(0, -24));
+            Rigidbody.velocity = Vector2.zero;
+            Rigidbody.AddForce(new Vector2(0, -0.8f), ForceMode2D.Impulse);
 
             // Scream
             AudioSource.PlayOneShot(DeathClip);
 
-            yield return new WaitForSeconds(4.0f);
+            for (int i = 0; i < 10; i++)
+            {
+                AudioSource.PlayOneShot(ExplosionClips[0]);
+                var explosion = Instantiate(BigExplosionPrefab);
+                var bounds = Renderer.bounds.size / 2.0f;
+                explosion.transform.position = transform.position +
+                    new Vector3(Random.Range(-bounds.x, bounds.x), Random.Range(-bounds.y, bounds.y));
+
+                yield return new WaitForSeconds(0.2f);
+
+                Destroy(explosion);
+            }
+
+            AudioSource.PlayOneShot(ExplosionClips[1]);
+            var explosions = new List<GameObject>();
+            for (int i = 0; i < 20; i++)
+            {
+                // Create explosions that move upward
+                var explosion = Instantiate(BigExplosionPrefab);
+                var bounds = Renderer.bounds.size / 2.0f;
+                explosion.transform.position = transform.position +
+                    new Vector3(Random.Range(-bounds.x, bounds.x), Random.Range(-bounds.y, bounds.y));
+                var explosionRigidbody = explosion.AddComponent<Rigidbody2D>();
+                explosionRigidbody.AddForce(new Vector2(0, 12));
+                explosions.Add(explosion);
+            }
+
+            yield return new WaitForSeconds(0.9f);
+            foreach (var explosion in explosions)
+            {
+                Destroy(explosion);
+            }
+            explosions.Clear();
+
+            AudioSource.PlayOneShot(ExplosionClips[2]);
+
+            // Create and rotate 4 jets
+            for (int i = 0; i < 32; i++)
+            {
+                var angle = i % 4 * Mathf.PI / 2 + Mathf.PI / 4;
+                var direction = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle));
+                var explosion = Instantiate(BigExplosionPrefab);
+                explosion.transform.position = transform.position;
+
+                var explosionRigidbody = explosion.AddComponent<Rigidbody2D>();
+                explosionRigidbody.AddForce(direction * 2.0f, ForceMode2D.Impulse);
+
+                explosions.Add(explosion);
+                yield return null;
+            }
+
+            foreach (var explosion in explosions)
+            {
+                Destroy(explosion);
+                yield return null;
+            }
+            explosions.Clear();
 
             gameObject.SetActive(false);
         }

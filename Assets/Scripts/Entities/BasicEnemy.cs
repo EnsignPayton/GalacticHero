@@ -34,6 +34,11 @@ namespace Assets.Scripts.Entities
         /// </summary>
         protected Rigidbody2D Rigidbody;
 
+        /// <summary>
+        /// Blick Coroutine
+        /// </summary>
+        protected Coroutine Blink;
+
         #endregion
 
         #region Script Overrides
@@ -54,7 +59,7 @@ namespace Assets.Scripts.Entities
 
             base.OnEnable();
 
-            StartCoroutine(BlinkCoroutine());
+            Blink = StartCoroutine(BlinkCoroutine());
         }
 
         /// <summary>
