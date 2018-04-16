@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.Scripts.Entities
 {
@@ -24,6 +25,11 @@ namespace Assets.Scripts.Entities
         /// Death sound clip
         /// </summary>
         public AudioClip DeathClip;
+
+        /// <summary>
+        /// Event fired on entity death
+        /// </summary>
+        public event EventHandler DeathEvent;
 
         /// <summary>
         /// AudioSource component
@@ -133,7 +139,7 @@ namespace Assets.Scripts.Entities
 
         #endregion
 
-        #region Virtual Methods
+        #region Methods
 
         /// <summary>
         /// Death coroutine
@@ -149,6 +155,8 @@ namespace Assets.Scripts.Entities
                 yield return new WaitForSeconds(DeathClip.length);
             }
 
+            InvokeDeath();
+
             gameObject.SetActive(false);
         }
 
@@ -158,12 +166,17 @@ namespace Assets.Scripts.Entities
             shot.Dispose();
         }
 
-        #endregion
-
         public void Kill()
         {
             _isDying = true;
             StartCoroutine(Die());
         }
+
+        protected void InvokeDeath()
+        {
+            DeathEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        #endregion
     }
 }
