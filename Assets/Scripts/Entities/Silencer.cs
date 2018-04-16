@@ -170,6 +170,9 @@ namespace Assets.Scripts.Entities
             }
             explosions.Clear();
 
+            Renderer.enabled = false;
+            yield return new WaitForSeconds(ExplosionClips[2].length);
+
             gameObject.SetActive(false);
         }
 
