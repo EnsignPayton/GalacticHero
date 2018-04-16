@@ -170,6 +170,8 @@ namespace Assets.Scripts.Entities
             }
             explosions.Clear();
 
+            InvokeDeath();
+
             Renderer.enabled = false;
             yield return new WaitForSeconds(ExplosionClips[2].length);
 
