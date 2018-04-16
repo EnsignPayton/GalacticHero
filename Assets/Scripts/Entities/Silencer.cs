@@ -18,6 +18,11 @@ namespace Assets.Scripts.Entities
         /// </summary>
         public GameObject[] EnemyPrefabs;
 
+        /// <summary>
+        /// Shot bounce off sound clip
+        /// </summary>
+        public AudioClip PingClip;
+
         private Vector3 _sourcePosition;
         private bool _collidedFlag;
 
@@ -64,20 +69,19 @@ namespace Assets.Scripts.Entities
 
                 // 5. Stop and shoot in diagonals
                 Velocity = Vector2.zero;
-                Shoot(transform.position + new Vector3(-0.2f, -0.2f), new Vector2(-1, -1).normalized, true);
-                Shoot(transform.position + new Vector3(-0.2f, 0.2f), new Vector2(-1, 1).normalized, true);
-                Shoot(transform.position + new Vector3(0.2f, -0.2f), new Vector2(1, -1).normalized, true);
-                Shoot(transform.position + new Vector3(0.2f, 0.2f), new Vector2(1, 1).normalized, true);
+                Shoot(transform.position + new Vector3(-0.2f, -0.2f), new Vector2(-1, -1).normalized, 0.8f, true);
+                Shoot(transform.position + new Vector3(-0.2f, 0.2f), new Vector2(-1, 1).normalized, 0.8f, true);
+                Shoot(transform.position + new Vector3(0.2f, -0.2f), new Vector2(1, -1).normalized, 0.8f, true);
+                Shoot(transform.position + new Vector3(0.2f, 0.2f), new Vector2(1, 1).normalized, 0.8f, true);
                 yield return new WaitForSeconds(4.0f);
-
-                Debug.Log("Loop Finished");
             }
         }
 
         protected override void ReactToHit(Shot shot, Collision2D collision)
         {
             bool isUp = collision.transform.position.y > transform.position.y;
-            Shoot(collision.transform.position, new Vector2(0, isUp ? 1 : -1));
+            Shoot(collision.transform.position, new Vector2(0, isUp ? 1 : -1), shot.Speed);
+            AudioSource.PlayOneShot(PingClip);
 
             // Don't take damage
             Health++;
@@ -89,17 +93,18 @@ namespace Assets.Scripts.Entities
         private void SpawnRandomEnemy()
         {
             var enemyPrefab = Instantiate(EnemyPrefabs.RandomElement());
+            enemyPrefab.transform.parent = transform;
             enemyPrefab.transform.position = transform.position;
         }
 
-        private void Shoot(Vector3? position = null, Vector2? direction = null, bool ignoreCollision = false)
+        private void Shoot(Vector3? position = null, Vector2? direction = null, float speed = 1.0f, bool ignoreCollision = false)
         {
             var shotPrefab = Instantiate(ShotPrefab);
             var shot = shotPrefab.GetComponent<Shot>();
             shot.Source = this;
             shot.transform.position = position ?? transform.position;
             shot.Direction = direction ?? Vector2.zero;
-            shot.Speed = 0.8f;
+            shot.Speed = speed;
 
             if (ignoreCollision)
             {
@@ -115,8 +120,6 @@ namespace Assets.Scripts.Entities
                     }
                 }
             }
-
-            Debug.Log("Shot!");
         }
     }
 }

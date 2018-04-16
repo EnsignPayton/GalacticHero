@@ -1795,6 +1795,7 @@ MonoBehaviour:
   EnemyPrefabs:
   - {fileID: 1014705843072622, guid: 9d387cec7ff70b24e9b9f9e82309d9cd, type: 2}
   - {fileID: 1710552858296218, guid: 43e81ffa4c7468d4080df94dd040e377, type: 2}
+  PingClip: {fileID: 8300000, guid: a089a2ba49e3b814cb7ed62a167f67e1, type: 3}
 --- !u!114 &114373222631218516
 MonoBehaviour:
   m_ObjectHideFlags: 1
