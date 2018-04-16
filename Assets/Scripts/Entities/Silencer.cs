@@ -91,6 +91,9 @@ namespace Assets.Scripts.Entities
             // Sink to floor
             Rigidbody.AddForce(new Vector2(0, -24));
 
+            // Scream
+            AudioSource.PlayOneShot(DeathClip);
+
             yield return new WaitForSeconds(4.0f);
 
             gameObject.SetActive(false);
