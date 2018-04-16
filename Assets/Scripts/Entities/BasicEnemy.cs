@@ -34,6 +34,11 @@ namespace Assets.Scripts.Entities
         /// </summary>
         protected Rigidbody2D Rigidbody;
 
+        /// <summary>
+        /// Blick Coroutine
+        /// </summary>
+        protected Coroutine Blink;
+
         #endregion
 
         #region Script Overrides
@@ -50,15 +55,15 @@ namespace Assets.Scripts.Entities
         protected override void OnEnable()
         {
             IsReady = false;
-            Velocity = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)).normalized * MoveSpeed;
+            SetRandomVelocity();
 
             base.OnEnable();
 
-            StartCoroutine(BlinkCoroutine());
+            Blink = StartCoroutine(BlinkCoroutine());
         }
 
         /// <summary>
-        /// Applies the set velocity if <see cref="IsReady"/> is true.
+        /// Applies the set velocity if <see cref="Entity.IsReady"/> is true.
         /// </summary>
         protected override void FixedUpdate()
         {
@@ -72,6 +77,7 @@ namespace Assets.Scripts.Entities
 
         protected override void OnCollisionEnter2D(Collision2D collision)
         {
+            // Bounce off things that are not a shot
             var shot = collision.collider.GetComponent<Shot>();
             if (shot == null)
             {
@@ -85,7 +91,7 @@ namespace Assets.Scripts.Entities
 
         #endregion
 
-        #region Virtual Methods
+        #region Protected Methods
 
         /// <summary>
         /// On Start, pauses and blinks before taking action.
@@ -104,6 +110,21 @@ namespace Assets.Scripts.Entities
             IsReady = true;
 
             yield return null;
+        }
+
+        protected void SetVelocity(Vector2 velocity)
+        {
+            Velocity = velocity.normalized * MoveSpeed;
+        }
+
+        protected void SetVelocity(float xSpeed, float ySpeed)
+        {
+            SetVelocity(new Vector2(xSpeed, ySpeed));
+        }
+
+        protected void SetRandomVelocity()
+        {
+            SetVelocity(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
         }
 
         #endregion

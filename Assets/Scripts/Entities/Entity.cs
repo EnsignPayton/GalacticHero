@@ -6,7 +6,7 @@ namespace Assets.Scripts.Entities
 {
     [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(AudioSource))]
-    public abstract class Entity : Script
+    public class Entity : Script
     {
         #region Fields
 
@@ -56,6 +56,8 @@ namespace Assets.Scripts.Entities
         [NonSerialized]
         public int Health;
 
+        private bool _isDying;
+
         #endregion
 
         #region Script Overrides
@@ -77,9 +79,9 @@ namespace Assets.Scripts.Entities
         /// </summary>
         protected override void Update()
         {
-            if (Health <= 0)
+            if (Health <= 0 && !_isDying)
             {
-                StartCoroutine(Die());
+                Kill();
             }
 
             base.Update();
@@ -93,8 +95,7 @@ namespace Assets.Scripts.Entities
             var shot = collision.collider.GetComponent<Shot>();
             if (shot != null && shot.Source != null && shot.Source != this)
             {
-                Health--;
-                shot.Dispose();
+                ReactToHit(shot, collision);
             }
 
             base.OnCollisionEnter2D(collision);
@@ -132,10 +133,12 @@ namespace Assets.Scripts.Entities
 
         #endregion
 
+        #region Virtual Methods
+
         /// <summary>
         /// Death coroutine
         /// </summary>
-        protected IEnumerator Die()
+        protected virtual IEnumerator Die()
         {
             if (DeathClip != null)
             {
@@ -147,6 +150,20 @@ namespace Assets.Scripts.Entities
             }
 
             gameObject.SetActive(false);
+        }
+
+        protected virtual void ReactToHit(Shot shot, Collision2D collision)
+        {
+            Health--;
+            shot.Dispose();
+        }
+
+        #endregion
+
+        public void Kill()
+        {
+            _isDying = true;
+            StartCoroutine(Die());
         }
     }
 }

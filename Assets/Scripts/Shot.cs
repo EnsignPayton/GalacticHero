@@ -6,6 +6,8 @@ namespace Assets.Scripts
     [RequireComponent(typeof(Rigidbody2D))]
     public class Shot : Script
     {
+        #region Fields
+
         /// <summary>
         /// Horizontal speed
         /// </summary>
@@ -14,7 +16,7 @@ namespace Assets.Scripts
         /// <summary>
         /// Source entity saved to prevent friendly fire
         /// </summary>
-        public Entity Source { get; set; }
+        public Script Source { get; set; }
 
         /// <summary>
         /// Projectile direction
@@ -22,6 +24,8 @@ namespace Assets.Scripts
         public Vector2 Direction { get; set; }
 
         private Rigidbody2D _rigidbody;
+
+        #endregion
 
         #region Script Overrides
 
