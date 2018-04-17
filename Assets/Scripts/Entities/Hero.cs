@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Utilities;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities
@@ -33,17 +33,50 @@ namespace Assets.Scripts.Entities
         public GameObject FlamePrefab;
 
         /// <summary>
+        /// Explosion object prefab
+        /// </summary>
+        public GameObject BigExplosionPrefab;
+
+        /// <summary>
         /// Audio clip to play when shooting
         /// </summary>
         public AudioClip ShootClip;
 
-        private Collider2D _collider;
+        /// <summary>
+        /// Another explosion audio clip
+        /// </summary>
+        public AudioClip ExplosionClip1;
+
+        /// <summary>
+        /// Another explosion audio clip
+        /// </summary>
+        public AudioClip ExplosionClip2;
+
+        /// <summary>
+        /// Room manager
+        /// </summary>
+        public RoomManager RoomManager;
+
+        /// <summary>
+        /// Game over UI elements
+        /// </summary>
+        public GameObject[] GameOverObjects;
+
         private Rigidbody2D _rigidbody;
         private SpriteRenderer _spriteRenderer;
-        private AudioSource _audioSource;
 
         private IList<Shot> _shots = new List<Shot>();
         private bool _flameReady = true;
+        private bool _isGameOver = false;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Room the Hero currently occupies
+        /// </summary>
+        public Room CurrentRoom => transform.parent.GetComponent<Room>();
 
         #endregion
 
@@ -51,27 +84,33 @@ namespace Assets.Scripts.Entities
 
         protected override void Awake()
         {
-            _collider = GetComponent<Collider2D>();
             _rigidbody = GetComponent<Rigidbody2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _audioSource = GetComponent<AudioSource>();
             IsReady = true;
 
+            foreach (var obj in GameOverObjects)
+            {
+                obj.SetActive(false);
+            }
+
             base.Awake();
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-
-            // TODO: Move to a more approprite script
-            Screen.SetResolution(Camera.main.pixelHeight, Camera.main.pixelHeight, false);
         }
 
         protected override void Update()
         {
             if (IsReady)
                 Shoot();
+
+            if (_isGameOver)
+            {
+                var enterPress = Input.GetKey(KeyCode.Return);
+
+                if (enterPress)
+                {
+                    _isGameOver = false;
+                    RoomManager.RestartGame(this);
+                }
+            }
 
             base.Update();
         }
@@ -109,21 +148,86 @@ namespace Assets.Scripts.Entities
         protected override void OnTriggerEnter2D(Collider2D triggerCollider)
         {
             var room = triggerCollider.GetComponent<Room>();
-            var oldRoom = transform.parent.GetComponent<Room>();
 
-            if (room != null && oldRoom != null && room != oldRoom)
+            if (room != null && CurrentRoom != null && room != CurrentRoom)
             {
-                Debug.Log("Now Entering " + room.name);
-
-                StartCoroutine(RoomTransition(oldRoom, room));
+                RoomManager.TransitionRooms(this, room, true);
             }
 
             base.OnTriggerEnter2D(triggerCollider);
         }
 
+        protected override IEnumerator Die()
+        {
+            IsReady = false;
+            Collider2D.enabled = false;
+            AudioSource.PlayOneShot(DeathClip);
+            AudioSource.PlayOneShot(ExplosionClip1);
+            AudioSource.PlayOneShot(ExplosionClip2);
+
+            // Spawn 12 particles, 3 on each diagonal
+            // First inner, then middle, then outer
+            var explosions = new List<GameObject>();
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    var explosion = Instantiate(BigExplosionPrefab);
+                    var angle = j * Mathf.PI / 2.0f + Mathf.PI / 4;
+                    var offset = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)).normalized;
+
+                    if (i == 0)
+                        offset *= 0.16f;
+                    else if (i == 1)
+                        offset *= 0.24f;
+                    else
+                        offset *= 0.32f;
+
+                    explosion.transform.position = transform.position + offset;
+                    explosions.Add(explosion);
+                }
+
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(0.1f);
+            explosions.DestroyAll();
+            Renderer.enabled = false;
+
+            InvokeDeath();
+
+            yield return new WaitForSeconds(1.0f);
+
+            foreach (var obj in GameOverObjects)
+            {
+                obj.SetActive(true);
+            }
+
+            _isGameOver = true;
+
+            yield return null;
+        }
+
         #endregion
 
         #region Methods
+
+        public void Reset()
+        {
+            if (InitialPosition != null)
+                transform.localPosition = InitialPosition.Value;
+
+            foreach (var obj in GameOverObjects)
+            {
+                obj.SetActive(false);
+            }
+
+            Health = MaxHealth;
+            IsDying = false;
+            Renderer.enabled = true;
+            Collider2D.enabled = true;
+            IsReady = true;
+        }
 
         private void Shoot()
         {
@@ -144,7 +248,7 @@ namespace Assets.Scripts.Entities
             {
                 var shotPrefab = Instantiate(ShotPrefab);
                 var shotCollider = shotPrefab.GetComponent<Collider2D>();
-                Physics2D.IgnoreCollision(shotCollider, _collider);
+                Physics2D.IgnoreCollision(shotCollider, Collider2D);
                 var shot = shotPrefab.GetComponent<Shot>();
                 shot.Source = this;
                 shot.Direction = isLeft ? new Vector2(-1, 0) : new Vector2(1, 0);
@@ -152,7 +256,7 @@ namespace Assets.Scripts.Entities
 
                 _shots.Add(shot);
 
-                _audioSource.PlayOneShot(ShootClip);
+                AudioSource.PlayOneShot(ShootClip);
             }
         }
 
@@ -165,40 +269,6 @@ namespace Assets.Scripts.Entities
             _flameReady = true;
 
             yield return null;
-        }
-
-        private IEnumerator RoomTransition(Room oldRoom, Room newRoom)
-        {
-            IsReady = false;
-
-            oldRoom.SetActive(false);
-            transform.parent = newRoom.transform;
-
-            var initialPosition = Camera.main.transform.position;
-
-            var finalPosition = Camera.main.transform.position;
-            finalPosition.x = newRoom.transform.position.x;
-            finalPosition.y = newRoom.transform.position.y;
-
-            var difference = finalPosition - initialPosition;
-
-            for (int i = 1; i <= 45; i++)
-            {
-                var tempPosition = initialPosition + (difference * i / 45.0f);
-                Camera.main.transform.position = tempPosition;
-
-                yield return new WaitForEndOfFrame();
-            }
-
-            Camera.main.transform.position = finalPosition;
-            newRoom.SetActive(true);
-
-            var localPosition = transform.localPosition;
-            localPosition.x = Mathf.Clamp(localPosition.x, -newRoom.Size, newRoom.Size);
-            localPosition.y = Mathf.Clamp(localPosition.y, -newRoom.Size, newRoom.Size);
-            transform.localPosition = localPosition;
-
-            IsReady = true;
         }
 
         #endregion

@@ -140,11 +140,7 @@ namespace Assets.Scripts.Entities
             }
 
             yield return new WaitForSeconds(0.9f);
-            foreach (var explosion in explosions)
-            {
-                Destroy(explosion);
-            }
-            explosions.Clear();
+            explosions.DestroyAll();
 
             AudioSource.PlayOneShot(ExplosionClips[2]);
 
