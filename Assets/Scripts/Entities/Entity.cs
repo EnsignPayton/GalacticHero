@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Assets.Scripts.Entities
 {
@@ -63,7 +62,7 @@ namespace Assets.Scripts.Entities
         [NonSerialized]
         public int Health;
 
-        private bool _isDying;
+        protected bool IsDying;
 
         #endregion
 
@@ -86,7 +85,7 @@ namespace Assets.Scripts.Entities
         /// </summary>
         protected override void Update()
         {
-            if (Health <= 0 && !_isDying)
+            if (Health <= 0 && !IsDying)
             {
                 Kill();
             }
@@ -169,7 +168,7 @@ namespace Assets.Scripts.Entities
 
         public void Kill()
         {
-            _isDying = true;
+            IsDying = true;
             StartCoroutine(Die());
         }
 

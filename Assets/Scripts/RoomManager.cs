@@ -7,6 +7,11 @@ namespace Assets.Scripts
 {
     public class RoomManager : Script
     {
+        /// <summary>
+        /// Room to spawn the player initially
+        /// </summary>
+        public Room StartRoom;
+
         protected override void Awake()
         {
             foreach (Transform child in transform)
@@ -32,12 +37,19 @@ namespace Assets.Scripts
             Screen.SetResolution(Camera.main.pixelHeight, Camera.main.pixelHeight, false);
         }
 
-        public void TransitionRooms(Hero hero, Room oldRoom, Room newRoom, bool animate)
+        public void RestartGame(Hero hero)
         {
-            StartCoroutine(RoomTransition(hero, oldRoom, newRoom, animate));
+            Debug.Log("Restarting the game...");
+            StartCoroutine(RoomTransition(hero, hero.CurrentRoom, StartRoom, false, true));
         }
 
-        private static IEnumerator RoomTransition(Entity hero, Room oldRoom, Room newRoom, bool animate)
+        public void TransitionRooms(Hero hero, Room newRoom, bool animate)
+        {
+            Debug.Log($"Transitioning to {newRoom.name}");
+            StartCoroutine(RoomTransition(hero, hero.CurrentRoom, newRoom, animate, false));
+        }
+
+        private static IEnumerator RoomTransition(Hero hero, Room oldRoom, Room newRoom, bool animate, bool isRestarting)
         {
             hero.IsReady = false;
 
@@ -66,10 +78,17 @@ namespace Assets.Scripts
             Camera.main.transform.position = finalPosition;
             newRoom.SetActive(true);
 
-            var localPosition = hero.transform.localPosition;
-            localPosition.x = Mathf.Clamp(localPosition.x, -newRoom.Size, newRoom.Size);
-            localPosition.y = Mathf.Clamp(localPosition.y, -newRoom.Size, newRoom.Size);
-            hero.transform.localPosition = localPosition;
+            if (isRestarting)
+            {
+                hero.Reset();
+            }
+            else
+            {
+                var localPosition = hero.transform.localPosition;
+                localPosition.x = Mathf.Clamp(localPosition.x, -newRoom.Size, newRoom.Size);
+                localPosition.y = Mathf.Clamp(localPosition.y, -newRoom.Size, newRoom.Size);
+                hero.transform.localPosition = localPosition;
+            }
 
             hero.IsReady = true;
 

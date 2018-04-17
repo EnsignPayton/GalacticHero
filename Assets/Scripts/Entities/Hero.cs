@@ -62,13 +62,21 @@ namespace Assets.Scripts.Entities
         /// </summary>
         public GameObject[] GameOverObjects;
 
-        private Collider2D _collider;
         private Rigidbody2D _rigidbody;
         private SpriteRenderer _spriteRenderer;
-        private AudioSource _audioSource;
 
         private IList<Shot> _shots = new List<Shot>();
         private bool _flameReady = true;
+        private bool _isGameOver = false;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Room the Hero currently occupies
+        /// </summary>
+        public Room CurrentRoom => transform.parent.GetComponent<Room>();
 
         #endregion
 
@@ -76,10 +84,8 @@ namespace Assets.Scripts.Entities
 
         protected override void Awake()
         {
-            _collider = GetComponent<Collider2D>();
             _rigidbody = GetComponent<Rigidbody2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            _audioSource = GetComponent<AudioSource>();
             IsReady = true;
 
             foreach (var obj in GameOverObjects)
@@ -94,6 +100,17 @@ namespace Assets.Scripts.Entities
         {
             if (IsReady)
                 Shoot();
+
+            if (_isGameOver)
+            {
+                var enterPress = Input.GetKey(KeyCode.Return);
+
+                if (enterPress)
+                {
+                    _isGameOver = false;
+                    RoomManager.RestartGame(this);
+                }
+            }
 
             base.Update();
         }
@@ -131,13 +148,10 @@ namespace Assets.Scripts.Entities
         protected override void OnTriggerEnter2D(Collider2D triggerCollider)
         {
             var room = triggerCollider.GetComponent<Room>();
-            var oldRoom = transform.parent.GetComponent<Room>();
 
-            if (room != null && oldRoom != null && room != oldRoom)
+            if (room != null && CurrentRoom != null && room != CurrentRoom)
             {
-                Debug.Log("Now Entering " + room.name);
-
-                RoomManager.TransitionRooms(this, oldRoom, room, true);
+                RoomManager.TransitionRooms(this, room, true);
             }
 
             base.OnTriggerEnter2D(triggerCollider);
@@ -178,7 +192,7 @@ namespace Assets.Scripts.Entities
 
             yield return new WaitForSeconds(0.1f);
             explosions.DestroyAll();
-            _spriteRenderer.enabled = false;
+            Renderer.enabled = false;
 
             InvokeDeath();
 
@@ -189,7 +203,7 @@ namespace Assets.Scripts.Entities
                 obj.SetActive(true);
             }
 
-            // TODO: Listen for enter and respawn
+            _isGameOver = true;
 
             yield return null;
         }
@@ -197,6 +211,23 @@ namespace Assets.Scripts.Entities
         #endregion
 
         #region Methods
+
+        public void Reset()
+        {
+            if (InitialPosition != null)
+                transform.localPosition = InitialPosition.Value;
+
+            foreach (var obj in GameOverObjects)
+            {
+                obj.SetActive(false);
+            }
+
+            Health = MaxHealth;
+            IsDying = false;
+            Renderer.enabled = true;
+            Collider2D.enabled = true;
+            IsReady = true;
+        }
 
         private void Shoot()
         {
@@ -217,7 +248,7 @@ namespace Assets.Scripts.Entities
             {
                 var shotPrefab = Instantiate(ShotPrefab);
                 var shotCollider = shotPrefab.GetComponent<Collider2D>();
-                Physics2D.IgnoreCollision(shotCollider, _collider);
+                Physics2D.IgnoreCollision(shotCollider, Collider2D);
                 var shot = shotPrefab.GetComponent<Shot>();
                 shot.Source = this;
                 shot.Direction = isLeft ? new Vector2(-1, 0) : new Vector2(1, 0);
@@ -225,7 +256,7 @@ namespace Assets.Scripts.Entities
 
                 _shots.Add(shot);
 
-                _audioSource.PlayOneShot(ShootClip);
+                AudioSource.PlayOneShot(ShootClip);
             }
         }
 
