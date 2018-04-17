@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Utilities;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities
@@ -33,9 +34,24 @@ namespace Assets.Scripts.Entities
         public GameObject FlamePrefab;
 
         /// <summary>
+        /// Explosion object prefab
+        /// </summary>
+        public GameObject BigExplosionPrefab;
+
+        /// <summary>
         /// Audio clip to play when shooting
         /// </summary>
         public AudioClip ShootClip;
+
+        /// <summary>
+        /// Another explosion audio clip
+        /// </summary>
+        public AudioClip ExplosionClip1;
+
+        /// <summary>
+        /// Another explosion audio clip
+        /// </summary>
+        public AudioClip ExplosionClip2;
 
         private Collider2D _collider;
         private Rigidbody2D _rigidbody;
@@ -119,6 +135,50 @@ namespace Assets.Scripts.Entities
             }
 
             base.OnTriggerEnter2D(triggerCollider);
+        }
+
+        protected override IEnumerator Die()
+        {
+            IsReady = false;
+            Collider2D.enabled = false;
+            AudioSource.PlayOneShot(DeathClip);
+            AudioSource.PlayOneShot(ExplosionClip1);
+            AudioSource.PlayOneShot(ExplosionClip2);
+
+            // Spawn 12 particles, 3 on each diagonal
+            // First inner, then middle, then outer
+            var explosions = new List<GameObject>();
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    var explosion = Instantiate(BigExplosionPrefab);
+                    var angle = j * Mathf.PI / 2.0f + Mathf.PI / 4;
+                    var offset = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)).normalized;
+
+                    if (i == 0)
+                        offset *= 0.16f;
+                    else if (i == 1)
+                        offset *= 0.24f;
+                    else
+                        offset *= 0.32f;
+
+                    explosion.transform.position = transform.position + offset;
+                    explosions.Add(explosion);
+                }
+
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(0.1f);
+            explosions.DestroyAll();
+            _spriteRenderer.enabled = false;
+
+            InvokeDeath();
+
+            // TODO: Respawn
+
+            yield return null;
         }
 
         #endregion

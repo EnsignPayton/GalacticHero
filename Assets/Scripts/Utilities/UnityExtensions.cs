@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Utilities
@@ -31,6 +32,19 @@ namespace Assets.Scripts.Utilities
             int i = Random.Range(0, list.Count);
 
             return list[i];
+        }
+
+        public static void DestroyAll(this ICollection<GameObject> objects)
+        {
+            if (objects == null)
+                throw new ArgumentNullException(nameof(objects));
+
+            foreach (var obj in objects)
+            {
+                Object.Destroy(obj);
+            }
+
+            objects.Clear();
         }
     }
 }
