@@ -57,6 +57,11 @@ namespace Assets.Scripts.Entities
         /// </summary>
         public RoomManager RoomManager;
 
+        /// <summary>
+        /// Game over UI elements
+        /// </summary>
+        public GameObject[] GameOverObjects;
+
         private Collider2D _collider;
         private Rigidbody2D _rigidbody;
         private SpriteRenderer _spriteRenderer;
@@ -76,6 +81,11 @@ namespace Assets.Scripts.Entities
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _audioSource = GetComponent<AudioSource>();
             IsReady = true;
+
+            foreach (var obj in GameOverObjects)
+            {
+                obj.SetActive(false);
+            }
 
             base.Awake();
         }
@@ -172,7 +182,14 @@ namespace Assets.Scripts.Entities
 
             InvokeDeath();
 
-            // TODO: Respawn
+            yield return new WaitForSeconds(1.0f);
+
+            foreach (var obj in GameOverObjects)
+            {
+                obj.SetActive(true);
+            }
+
+            // TODO: Listen for enter and respawn
 
             yield return null;
         }
