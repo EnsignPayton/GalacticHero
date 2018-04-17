@@ -119,6 +119,7 @@ namespace Assets.Scripts.Entities
 
             Renderer.enabled = true;
             Collider2D.enabled = true;
+            IsDying = false;
             Health = MaxHealth;
 
             base.OnEnable();
