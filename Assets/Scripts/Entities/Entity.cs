@@ -54,7 +54,8 @@ namespace Assets.Scripts.Entities
         /// <summary>
         /// Ready to move and attack
         /// </summary>
-        protected bool IsReady;
+        [NonSerialized]
+        public bool IsReady;
 
         /// <summary>
         /// Current health total

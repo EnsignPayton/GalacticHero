@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Utilities;
@@ -53,6 +52,11 @@ namespace Assets.Scripts.Entities
         /// </summary>
         public AudioClip ExplosionClip2;
 
+        /// <summary>
+        /// Room manager
+        /// </summary>
+        public RoomManager RoomManager;
+
         private Collider2D _collider;
         private Rigidbody2D _rigidbody;
         private SpriteRenderer _spriteRenderer;
@@ -74,14 +78,6 @@ namespace Assets.Scripts.Entities
             IsReady = true;
 
             base.Awake();
-        }
-
-        protected override void Start()
-        {
-            base.Start();
-
-            // TODO: Move to a more approprite script
-            Screen.SetResolution(Camera.main.pixelHeight, Camera.main.pixelHeight, false);
         }
 
         protected override void Update()
@@ -131,7 +127,7 @@ namespace Assets.Scripts.Entities
             {
                 Debug.Log("Now Entering " + room.name);
 
-                StartCoroutine(RoomTransition(oldRoom, room));
+                RoomManager.TransitionRooms(this, oldRoom, room, true);
             }
 
             base.OnTriggerEnter2D(triggerCollider);
@@ -225,40 +221,6 @@ namespace Assets.Scripts.Entities
             _flameReady = true;
 
             yield return null;
-        }
-
-        private IEnumerator RoomTransition(Room oldRoom, Room newRoom)
-        {
-            IsReady = false;
-
-            oldRoom.SetActive(false);
-            transform.parent = newRoom.transform;
-
-            var initialPosition = Camera.main.transform.position;
-
-            var finalPosition = Camera.main.transform.position;
-            finalPosition.x = newRoom.transform.position.x;
-            finalPosition.y = newRoom.transform.position.y;
-
-            var difference = finalPosition - initialPosition;
-
-            for (int i = 1; i <= 45; i++)
-            {
-                var tempPosition = initialPosition + (difference * i / 45.0f);
-                Camera.main.transform.position = tempPosition;
-
-                yield return new WaitForEndOfFrame();
-            }
-
-            Camera.main.transform.position = finalPosition;
-            newRoom.SetActive(true);
-
-            var localPosition = transform.localPosition;
-            localPosition.x = Mathf.Clamp(localPosition.x, -newRoom.Size, newRoom.Size);
-            localPosition.y = Mathf.Clamp(localPosition.y, -newRoom.Size, newRoom.Size);
-            transform.localPosition = localPosition;
-
-            IsReady = true;
         }
 
         #endregion
