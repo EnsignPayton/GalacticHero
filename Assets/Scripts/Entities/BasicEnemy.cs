@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities
@@ -87,6 +88,18 @@ namespace Assets.Scripts.Entities
             }
 
             base.OnCollisionEnter2D(collision);
+        }
+
+        protected override void OnTriggerEnter2D(Collider2D triggerCollider)
+        {
+            var room = triggerCollider.GetComponent<Room>();
+
+            if (room != null && room.transform.Cast<Transform>().All(child => child != transform))
+            {
+                Velocity = -Velocity;
+            }
+
+            base.OnTriggerEnter2D(triggerCollider);
         }
 
         #endregion
