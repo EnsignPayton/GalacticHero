@@ -43,6 +43,7 @@ namespace Assets.Scripts.Entities
 
         private Vector3 _sourcePosition;
         private bool _collidedFlag;
+        private IList<GameObject> _spawns = new List<GameObject>();
 
         #endregion
 
@@ -93,6 +94,18 @@ namespace Assets.Scripts.Entities
                 Shoot(transform.position + new Vector3(0.16f, 0.16f), new Vector2(1, 1).normalized, 0.8f, true);
                 yield return new WaitForSeconds(4.0f);
             }
+        }
+
+        protected override void OnDisable()
+        {
+            foreach (var spawn in _spawns)
+            {
+                Destroy(spawn);
+            }
+
+            _spawns.Clear();
+
+            base.OnDisable();
         }
 
         protected override IEnumerator Die()
@@ -204,6 +217,7 @@ namespace Assets.Scripts.Entities
             var enemyPrefab = Instantiate(EnemyPrefabs.RandomElement());
             enemyPrefab.transform.parent = transform;
             enemyPrefab.transform.position = transform.position;
+            _spawns.Add(enemyPrefab);
         }
 
         private void Shoot(Vector3? position = null, Vector2? direction = null, float speed = 1.0f, bool ignoreCollision = false)
