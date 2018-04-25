@@ -60,6 +60,7 @@ namespace Assets.Scripts.Entities
 
             base.OnEnable();
 
+            SpriteRenderer.sprite = NormalSprite;
             Blink = StartCoroutine(BlinkCoroutine());
         }
 
@@ -82,6 +83,8 @@ namespace Assets.Scripts.Entities
             var shot = collision.collider.GetComponent<Shot>();
             if (shot == null)
             {
+                if (collision.contacts.Length == 0) return;
+
                 var normal = collision.contacts[0].normal;
 
                 Velocity += -2.0f * Vector2.Dot(Velocity, normal) * normal;
