@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Utilities;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
 {
@@ -34,8 +36,14 @@ namespace Assets.Scripts.Entities
         /// </summary>
         public AudioClip[] ExplosionClips;
 
+        /// <summary>
+        /// Flag for dead boss
+        /// </summary>
+        [NonSerialized] public bool HasDied;
+
         private Vector3 _sourcePosition;
         private bool _collidedFlag;
+        private IList<GameObject> _spawns = new List<GameObject>();
 
         #endregion
 
@@ -88,11 +96,26 @@ namespace Assets.Scripts.Entities
             }
         }
 
+        protected override void OnDisable()
+        {
+            foreach (var spawn in _spawns)
+            {
+                Destroy(spawn);
+            }
+
+            _spawns.Clear();
+
+            base.OnDisable();
+        }
+
         protected override IEnumerator Die()
         {
             // Stop interaction
             IsReady = false;
             StopCoroutine(Blink);
+
+            // Permanently die
+            HasDied = true;
 
             // Disable children
             foreach (Transform child in transform)
@@ -194,6 +217,7 @@ namespace Assets.Scripts.Entities
             var enemyPrefab = Instantiate(EnemyPrefabs.RandomElement());
             enemyPrefab.transform.parent = transform;
             enemyPrefab.transform.position = transform.position;
+            _spawns.Add(enemyPrefab);
         }
 
         private void Shoot(Vector3? position = null, Vector2? direction = null, float speed = 1.0f, bool ignoreCollision = false)

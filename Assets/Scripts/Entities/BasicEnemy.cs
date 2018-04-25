@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Entities
@@ -59,6 +60,7 @@ namespace Assets.Scripts.Entities
 
             base.OnEnable();
 
+            SpriteRenderer.sprite = NormalSprite;
             Blink = StartCoroutine(BlinkCoroutine());
         }
 
@@ -81,12 +83,26 @@ namespace Assets.Scripts.Entities
             var shot = collision.collider.GetComponent<Shot>();
             if (shot == null)
             {
+                if (collision.contacts.Length == 0) return;
+
                 var normal = collision.contacts[0].normal;
 
                 Velocity += -2.0f * Vector2.Dot(Velocity, normal) * normal;
             }
 
             base.OnCollisionEnter2D(collision);
+        }
+
+        protected override void OnTriggerEnter2D(Collider2D triggerCollider)
+        {
+            var room = triggerCollider.GetComponent<Room>();
+
+            if (room != null && room.transform.Cast<Transform>().All(child => child != transform))
+            {
+                Velocity = -Velocity;
+            }
+
+            base.OnTriggerEnter2D(triggerCollider);
         }
 
         #endregion

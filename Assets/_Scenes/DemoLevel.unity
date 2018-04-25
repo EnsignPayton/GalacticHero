@@ -730,7 +730,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4133284660277910, guid: a01be869aa944fa469cabc781025f87e, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114062461500008478, guid: a01be869aa944fa469cabc781025f87e,
         type: 2}
@@ -750,7 +750,7 @@ Prefab:
     - target: {fileID: 114062461500008478, guid: a01be869aa944fa469cabc781025f87e,
         type: 2}
       propertyPath: MaxHealth
-      value: 99999
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a01be869aa944fa469cabc781025f87e, type: 2}

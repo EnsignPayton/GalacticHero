@@ -193,6 +193,8 @@ MonoBehaviour:
   ShootClip: {fileID: 8300000, guid: d36a791823e941e47ac701346297f2e9, type: 3}
   ExplosionClip1: {fileID: 8300000, guid: 283aef6cd0b0bb5498e45a23da732ff5, type: 3}
   ExplosionClip2: {fileID: 8300000, guid: 49a85fcd62f04824d965da4e0ba642f8, type: 3}
+  RoomManager: {fileID: 0}
+  GameOverObjects: []
 --- !u!212 &212763538026986626
 SpriteRenderer:
   m_ObjectHideFlags: 1

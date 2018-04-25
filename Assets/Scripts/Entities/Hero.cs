@@ -98,6 +98,8 @@ namespace Assets.Scripts.Entities
 
         protected override void Update()
         {
+            _shots = _shots.Where(x => x != null).ToList();
+
             if (IsReady)
                 Shoot();
 
@@ -151,6 +153,11 @@ namespace Assets.Scripts.Entities
 
             if (room != null && CurrentRoom != null && room != CurrentRoom)
             {
+                foreach (var shot in _shots)
+                {
+                    shot.Dispose();
+                }
+
                 RoomManager.TransitionRooms(this, room, true);
             }
 
@@ -241,8 +248,6 @@ namespace Assets.Scripts.Entities
                 return;
 
             _spriteRenderer.flipX = isLeft;
-
-            _shots = _shots.Where(x => x != null).ToList();
 
             if (_shots.Count < MaximumShots)
             {
