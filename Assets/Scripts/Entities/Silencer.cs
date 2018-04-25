@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.Utilities;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Entities
 {
@@ -33,6 +35,11 @@ namespace Assets.Scripts.Entities
         /// Explosion sound clips. Should always contain 3 clips.
         /// </summary>
         public AudioClip[] ExplosionClips;
+
+        /// <summary>
+        /// Flag for dead boss
+        /// </summary>
+        [NonSerialized] public bool HasDied;
 
         private Vector3 _sourcePosition;
         private bool _collidedFlag;
@@ -93,6 +100,9 @@ namespace Assets.Scripts.Entities
             // Stop interaction
             IsReady = false;
             StopCoroutine(Blink);
+
+            // Permanently die
+            HasDied = true;
 
             // Disable children
             foreach (Transform child in transform)
